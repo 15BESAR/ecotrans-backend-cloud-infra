@@ -12,13 +12,15 @@ if __name__ == '__main__':
     my_parser.add_argument('image',type=str,help='image')
     my_parser.add_argument('tag',type=str,help='tag')
     args = my_parser.parse_args()
-    with open(args.yaml) as f:
-        y = yaml.safe_load(f)
+    with open(args.yaml,'r') as f:
+        data = yaml.safe_load(f)
         # edit deployment name
-        y['metadata']['name']= args.name
-        # edit replicas
-        y['spec']['replicas']= args.replica
-        # edit image name: project + name + tag
-        y['spec']['template']['spec']['containers'][0]['image'] = f'gcr.io/{args.project}/{args.image}:{args.tag}' 
-        print(yaml.dump(y, default_flow_style=False, sort_keys=False))
+    data['metadata']['name']= args.name
+    # edit replicas
+    data['spec']['replicas']= args.replica
+    # edit image name: project + name + tag
+    data['spec']['template']['spec']['containers'][0]['image'] = f'gcr.io/{args.project}/{args.image}:{args.tag}' 
+    with open(args.yaml,'w') as f:
+        yaml.dump(data,f)
+    # print(yaml.dump(data, default_flow_style=False, sort_keys=False))
     print(f'Done updating {args.yaml} ....\n\n')

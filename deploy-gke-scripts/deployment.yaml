@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-deployment
   labels:
     app: go
+  name: go-deployment
 spec:
-  replicas: 2
+  replicas: '3'
   selector:
     matchLabels:
       app: go
@@ -15,7 +15,7 @@ spec:
         app: go
     spec:
       containers:
-      - name: go-test
-        image: gcr.io/test-capstone-350108/go-test:v0.02
+      - image: gcr.io/test-capstone-350108/go-test:v0.04
+        name: go-test
         ports:
         - containerPort: 8080
