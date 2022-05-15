@@ -30,7 +30,11 @@ func FindRoutes(c *gin.Context) {
 	fmt.Println("GET /routes")
 	body, _ := ioutil.ReadAll(c.Request.Body)
 	fmt.Println("Data:", string(body))
-	c.JSON(http.StatusOK, DummyGmapsData)
+	b, err := ioutil.ReadFile("./controllers/dummyJSON.json") // just pass the file name
+	if err != nil {
+		fmt.Print(err)
+	}
+	c.Data(http.StatusOK, "application/json; charset=utf-8", b)
 }
 
 // POST /finish
