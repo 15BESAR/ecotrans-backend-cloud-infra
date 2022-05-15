@@ -2,30 +2,35 @@ package main
 
 import (
 	"net/http"
-	"os"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/controllers"
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	e := echo.New()
+	r := gin.Default()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	// Connect to database
+	models.ConnectDatabase()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "Hello, Docker! <3")
-	})
+	// Routes
+	r.GET("/", root)
+	r.POST("/register", controllers.RegisterUser)
+	r.POST("/login", controllers.LoginUser)
+	r.GET("/users", controllers.FindUsers)
+	r.GET("/user/:userId", controllers.FindUserById)
+	r.PUT("/user/:userId", controllers.UpdateUserById)
+	r.GET("/autocomplete", controllers.AutocompleteLocation)
+	r.GET("/routes", controllers.FindRoutes)
+	r.POST("/finish", controllers.AddJourney)
+	r.GET("/vouchers", controllers.FindVouchers)
+	r.POST("/voucher", controllers.BuyVoucher)
 
-	e.GET("/ping", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, struct{ Status string }{Status: "OK"})
-	})
+	// Run the server
+	r.Run()
+}
 
-	httpPort := os.Getenv("HTTP_PORT")
-	if httpPort == "" {
-		httpPort = "8080"
-	}
-
-	e.Logger.Fatal(e.Start(":" + httpPort))
+func root(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"msg": "Ecotrans GO Backend API"})
 }

@@ -104,7 +104,7 @@ The Rest API is described below..
 ```
 ## GET All Profile Data
 ### Request
-`GET /profiles`
+`GET /users`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 ### Response
@@ -143,7 +143,7 @@ The Rest API is described below..
 
 ## GET User Profile Data
 ### Request
-`GET /profile/<userId>`
+`GET /user/<userId>`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 ### Response
@@ -177,7 +177,7 @@ The Rest API is described below..
 
 ## Update User Profile Data
 ### Request
-`PUT /profile/<userId>`
+`PUT /user/<userId>`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
@@ -214,10 +214,15 @@ The Rest API is described below..
 
 ## AutoComplete Gmaps API
 ### Request
-`GET /autocomplete?input=jalan+su`
+`GET /autocomplete`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
-
+`Content-type: application/json`
+```json
+{
+    "input": "jalan su"
+}
+```
 ### Response
 #### :white_check_mark: SUCCESS
 `HTTP 200 OK`
