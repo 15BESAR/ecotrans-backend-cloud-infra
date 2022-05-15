@@ -2,6 +2,11 @@
 ecoTrans is a mobile application that allows users to travel to reach their destination with the most environmentally friendly method. It provides user with list of transportation route alternative along with the carbon emission that's reduced compared to private transportation. It also gives user air quality prediction and rewards user with points that can be exchanged for various voucher. The app also gives user voucher recommendation based on user preferences, voucher availibility, and purchase pattern.
 </br>
 
+## Endpoints
+Currently hosted on GKE with endpoints:
+```34.101.186.107```
+Try accessing API with 
+```http://34.101.186.107``` 
 ## Backend and Cloud Tech Stack
 Backend created with Go with gin framework, containerization with docker and cloud build, ingress load balancing with nginx, and deployed on Google Kubernetes Engine (GKE)
 

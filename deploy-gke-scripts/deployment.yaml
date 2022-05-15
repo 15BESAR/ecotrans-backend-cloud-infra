@@ -5,7 +5,7 @@ metadata:
     app: go
   name: go-deployment
 spec:
-  replicas: '3'
+  replicas: 3
   selector:
     matchLabels:
       app: go
