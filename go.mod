@@ -1,4 +1,4 @@
-module capstone
+module main
 
 go 1.18
 
