@@ -17,6 +17,9 @@ func main() {
 	// Connect to database
 	models.ConnectDatabase(env.dbUser, env.dbPass)
 
+	// Middleware
+	r.Use(TokenAuthMiddleware())
+
 	// Routes
 	r.GET("/", root)
 	r.POST("/register", controllers.RegisterUser)
