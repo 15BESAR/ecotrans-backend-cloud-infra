@@ -9,10 +9,13 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	// Load Environment
+	env := LoadEnvironment()
 
+	r := gin.Default()
+	r.SetTrustedProxies(nil)
 	// Connect to database
-	models.ConnectDatabase()
+	models.ConnectDatabase(env.dbUser, env.dbPass)
 
 	// Routes
 	r.GET("/", root)

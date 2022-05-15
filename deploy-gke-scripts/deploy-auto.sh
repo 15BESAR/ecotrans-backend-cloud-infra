@@ -14,7 +14,7 @@ export DEPLOYMENT_NAME=go-deployment
 export REPLICAS=3
 export IMAGE_NAME=go-test
 export TAG=v0.04 #Update it 
-export IS_BUILD_IMAGE=false #true if wanna build container
+export IS_BUILD_IMAGE=true #true if wanna build container
 export IS_APPLY_GKE=true #true if wanna build container
 
 echo $IS_BUILD_IMAGE
