@@ -1,0 +1,293 @@
+{
+	"info": {
+		"_postman_id": "22df2fc1-5221-4b6a-a447-41dbc77b9369",
+		"name": "ecoTrans-Go-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST /register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"fname\",\r\n    \"lastName\": \"lname\",\r\n    \"ageOfBirth\": \"10-03-2000\",\r\n    \"age\": 21,\r\n    \"sex\": \"m/f\",\r\n    \"address\": \"lorem ipsum...\",\r\n    \"occupation\": \"student\",\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /user/:userid",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /user/:userid",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/123",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /autocomplete",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"input\": \"jalan su\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/autocomplete",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"autocomplete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /routes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"input\": \"jalan su\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/autocomplete",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"autocomplete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /finish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"origin\": \"ChIJl02Bz3GMaS4RCgefgFZdKtI\", // gmaps place_id\r\n    \"destination\": \"ChIJY9TrwiH0aS4RrvGqlZvI_Mw\",\r\n    \"startTime\": \"2018-12-10T13:49:51.141Z\",\r\n    \"finishTime\": \"2018-12-10T16:49:51.141Z\",\r\n    \"distanceTravelled\" : 10.43, // in km\r\n    \"carbonSaved\" : 4.45, // in g co2\r\n    \"rewards\" : 102 // in point \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/finish",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"finish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /vouchers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/vouchers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vouchers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /voucher",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"voucherId\": \"c2njbn4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/voucher",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"voucher"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
