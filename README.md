@@ -5,8 +5,8 @@ ecoTrans is a mobile application that allows users to travel to reach their dest
 ## Endpoints
 Currently hosted on GKE with endpoints:
 ```34.101.186.107```
-Try accessing API with 
-```http://34.101.186.107``` 
+</br>
+Try accessing API with http://34.101.186.107
 ## Backend and Cloud Tech Stack
 Backend created with Go with gin framework, containerization with docker and cloud build, ingress load balancing with nginx, and deployed on Google Kubernetes Engine (GKE)
 
