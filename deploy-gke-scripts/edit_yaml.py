@@ -17,7 +17,7 @@ if __name__ == '__main__':
         # edit deployment name
     data['metadata']['name']= args.name
     # edit replicas
-    data['spec']['replicas']= args.replica
+    data['spec']['replicas']= int(args.replica)
     # edit image name: project + name + tag
     data['spec']['template']['spec']['containers'][0]['image'] = f'gcr.io/{args.project}/{args.image}:{args.tag}' 
     with open(args.yaml,'w') as f:
