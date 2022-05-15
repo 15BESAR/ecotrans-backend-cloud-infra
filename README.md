@@ -32,7 +32,7 @@ The script will build the container using Cloud Build, scale cluster if needed, 
 </br>
 You need sufficient permission to be able to execute the script successfully
 ```bash
-bash deploy-gke-scripts/deploy.sh 
+bash deploy-gke-scripts/deploy-auto.sh 
 ```
 
 # API Documentation
