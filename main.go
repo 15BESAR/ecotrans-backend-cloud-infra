@@ -30,6 +30,7 @@ func main() {
 	r.GET("/", root)
 	r.POST("/register", controllers.RegisterUser)
 	r.POST("/login", controllers.LoginUser)
+	r.POST("/login/refresh", controllers.RefreshToken)
 	r.GET("/users", controllers.FindUsers)
 	r.GET("/user/:userId", controllers.FindUserById)
 	r.PUT("/user/:userId", controllers.UpdateUserById)

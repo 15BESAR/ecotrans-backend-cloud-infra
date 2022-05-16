@@ -11,3 +11,7 @@ type UserInputLogin struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+type TokenRefresh struct {
+	Token string `json:"token"`
+}
