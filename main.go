@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/controllers"
@@ -15,7 +16,12 @@ func main() {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 	// Connect to database
-	models.ConnectDatabase(env.dbUser, env.dbPass)
+
+	var err error
+	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName)
+	if err != nil {
+		log.Fatalf("Database not opened")
+	}
 
 	// Middleware
 	r.Use(TokenAuthMiddleware())

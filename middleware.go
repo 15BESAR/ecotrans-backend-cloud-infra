@@ -14,6 +14,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		// token := c.Request.
+
 		fmt.Println("PASS THROUGH MIDDLEWARE !")
 
 		c.Next()

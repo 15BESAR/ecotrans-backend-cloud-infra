@@ -1,31 +1,114 @@
 package controllers
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func checkRegisterInput(username string, email string, pass string) bool {
+	return true
+}
 
 // POST /register
 // Register user
 func RegisterUser(c *gin.Context) {
-	fmt.Println("POST /Register")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
+	var userInput models.UserInputRegis
+	if err := c.ShouldBindJSON(&userInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No binding"})
+		return
+	}
+	if !checkRegisterInput(userInput.Username, userInput.Email, userInput.Password) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"userId": "12d1d12d12", "token": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"})
+	var usertemp string
+	var emailtemp string
+	err := models.Db.QueryRow("SELECT username FROM users WHERE username=? OR email=?", userInput.Username, userInput.Email).Scan(&usertemp, &emailtemp)
+
+	switch {
+	case err == sql.ErrNoRows:
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userInput.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
+			return
+		}
+
+		_, err = models.Db.Exec("INSERT INTO users(username,email,password) VALUES(?,?,?)", userInput.Username, userInput.Email, hashedPassword)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
+			return
+		}
+	case err != nil:
+		c.JSON(500, gin.H{"error": "Username or email has been taken"})
+		return
+	default:
+		c.JSON(500, gin.H{"error": "Server error"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "Account has been created"})
 }
 
 // POST /login
 // User login, return token
-func LoginUser(c *gin.Context) {
-	fmt.Println("POST /login")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
+var APPLICATION_NAME = "Lesgo"
+var LOGIN_EXPIRATION_DURATION = time.Duration(5) * time.Hour
+var JWT_SIGNING_METHOD = jwt.SigningMethodHS256
+var JWT_SIGNATURE_KEY = []byte("15 besar")
 
-	c.JSON(http.StatusOK, gin.H{"userId": "12d1d12d12", "token": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"})
+type M map[string]interface{}
+
+func LoginUser(c *gin.Context) {
+	var userInput models.UserInputLogin
+	var databaseInput models.UserInputLogin
+	if err := c.ShouldBindJSON(&userInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := models.Db.QueryRow("SELECT id, username, password FROM users WHERE username=?", userInput.Username).Scan(&databaseInput.Id, &databaseInput.Username, &databaseInput.Password)
+
+	if err != nil {
+		c.JSON(http.StatusMovedPermanently, gin.H{"error": "No username"})
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(databaseInput.Password), []byte(userInput.Password))
+	if err != nil {
+		c.JSON(http.StatusMovedPermanently, gin.H{"error": "Wrong Password"})
+		return
+	}
+
+	claims := models.ClaimsJWT{
+		StandardClaims: jwt.StandardClaims{
+			Issuer:    APPLICATION_NAME,
+			ExpiresAt: time.Now().Add(LOGIN_EXPIRATION_DURATION).Unix(),
+		},
+		Username: userInput.Username,
+	}
+
+	token := jwt.NewWithClaims(
+		JWT_SIGNING_METHOD,
+		claims,
+	)
+
+	signedToken, err := token.SignedString(JWT_SIGNATURE_KEY)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bad request"})
+		return
+	}
+	tokenString, _ := json.Marshal(M{"token": signedToken})
+	fmt.Println(tokenString)
+	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.Id, "token": tokenString})
 }
 
 // GET /users
