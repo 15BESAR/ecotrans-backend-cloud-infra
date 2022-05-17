@@ -1,0 +1,7 @@
+DB_NAME="dev-instances"
+DB_USERNAME="root"
+DB_PASSWORD="password"
+APPLICATION_NAME="EcoTrans"
+JWT_SIGNATURE_KEY="15 besar"
+DB_TCP_HOST=localhost
+DB_PORT=3306
