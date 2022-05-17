@@ -52,8 +52,9 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 				}
 				return models.JWT_SIGNATURE_KEY, nil
 			})
+
 			if err != nil {
-				c.String(http.StatusBadRequest, "Parse vailed")
+				c.String(http.StatusBadRequest, "Signing method not valid")
 				c.Abort()
 				return
 			}
@@ -61,7 +62,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 			_, ok := token.Claims.(jwt.MapClaims)
 
 			if !ok || !token.Valid {
-				c.String(http.StatusBadRequest, "not valid")
+				c.String(http.StatusBadRequest, "Signature not valid")
 				c.Abort()
 				return
 			}

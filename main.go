@@ -18,7 +18,8 @@ func main() {
 	// Connect to database
 
 	var err error
-	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName)
+
+	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName, env.dbTCPHost, env.dbPort)
 	if err != nil {
 		log.Fatalf("Database not opened")
 	}
