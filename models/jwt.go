@@ -12,6 +12,6 @@ var JWT_SIGNING_METHOD = jwt.SigningMethodHS256
 var JWT_SIGNATURE_KEY = []byte("15 besar")
 
 type ClaimsJWT struct {
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 	Username string `json:"username"`
 }
