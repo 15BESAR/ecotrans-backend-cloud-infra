@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// Load Environment
-	env := LoadEnvironment()
+	env = LoadEnvironment()
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
