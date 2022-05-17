@@ -12,6 +12,8 @@ import (
 func main() {
 	// Load Environment
 	env = LoadEnvironment()
+	models.APPLICATION_NAME = env.appName
+	models.JWT_SIGNATURE_KEY = env.sigKeyJwt
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
