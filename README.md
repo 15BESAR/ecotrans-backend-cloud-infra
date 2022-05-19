@@ -56,20 +56,19 @@ The Rest API is described below..
 ```
 ### Response
 #### :white_check_mark: SUCCESS 
-`HTTP 200 OK`
+`HTTP 201 OK`
 `Content-type: application/json`
 ```json
 {
-    "userId": 132312312,
-    "token": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    "status" : "Account has been created",
 }
 ```
 #### :red_circle: FAILED
-`HTTP 400 Bad Request`
+`HTTP 500 Bad Request`
 `Content-type: application/json`
 ```json
 {
-    "msg": "username taken/ password not valid/ personal data not valid"
+   "error": "<Username / Email / both> has been taken"
 }
 ```
 ## User Login

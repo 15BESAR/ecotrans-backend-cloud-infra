@@ -22,6 +22,7 @@ func main() {
 	var err error
 
 	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName, env.dbTCPHost, env.dbPort)
+	models.Db.AutoMigrate(&models.User{})
 	if err != nil {
 		log.Fatalf("Database not opened")
 	}

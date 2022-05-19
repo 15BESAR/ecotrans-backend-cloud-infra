@@ -18,13 +18,14 @@ import (
 type M map[string]interface{}
 
 func LoginUser(c *gin.Context) {
-	var userInput models.UserInputLogin
-	var databaseInput models.UserInputLogin
+	var userInput models.User
+	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := models.Db.QueryRow("SELECT id, username, password FROM users WHERE username=?", userInput.Username).Scan(&databaseInput.Id, &databaseInput.Username, &databaseInput.Password)
+	// err := models.Db.QueryRow("SELECT id, username, password FROM users WHERE username=?", userInput.Username).Scan(&databaseInput.Id, &databaseInput.Username, &databaseInput.Password)
+	err := models.Db.Where("username = ?", userInput.Username).First(&databaseInput).Error
 
 	if err != nil {
 		c.JSON(http.StatusMovedPermanently, gin.H{"error": "No username"})
