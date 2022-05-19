@@ -26,5 +26,11 @@ POST /refresh
         200 : {"token" : <new jwt token>}
     *go to this path to refresh the token, by 15 minutes time mark
 
-
+POST /register
+    body
+        {
+            "username" : "<input username here>",
+            "email" : "<input email here>",
+            "password" : "<input password here>"
+        }
 For logout, just forget the token

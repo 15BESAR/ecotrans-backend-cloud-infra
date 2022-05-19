@@ -51,13 +51,7 @@ The Rest API is described below..
 {
     "username": "foo",
     "password": "123",
-    "firstName": "fname",
-    "lastName": "lname",
-    "ageOfBirth": "10-03-2000",
-    "age": 21,
-    "sex": "m/f",
-    "address": "lorem ipsum...",
-    "occupation": "student",
+    "email": "foo@foo.com",
 }
 ```
 ### Response
@@ -107,6 +101,17 @@ The Rest API is described below..
     "msg": "username/password is incorrect"
 }
 ```
+## Refresh Token
+### Post
+`Post /refresh`
+`Accept: application/json`
+`Content-Type: application/json`
+```json
+{
+    "token" : "asjbfosanfnsa"
+}
+```
+
 ## GET All Profile Data
 ### Request
 `GET /users`
