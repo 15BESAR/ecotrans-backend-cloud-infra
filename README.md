@@ -262,20 +262,9 @@ The Rest API is described below..
 `Content-type: application/json`
 ```json
 {
-    "origin" : {
-        "latitude": -6.8837833,
-        "longitude": 107.6135736
-    },
-    "destination" : {
-        "latitude": -6.9200488,
-        "longitude": 107.6237797
-    },
-    "preferences" : {
-        "walk" : true,
-        "bicycle" : false,
-        "bus" : true,
-        "train" : true
-    }
+    "origin" : "Jalan Tubagus Depan No 76",
+    "destination" : "Borma Dago",
+    "preference" : "walking"
 }
 ```
 ### Response
@@ -287,7 +276,7 @@ The Rest API is described below..
     "routes":[
         {
         // most likely the same as gmaps direction api documentation response,
-        // but i'll add carbonEmissionSaved attributes for each route
+        // but i'll add carbon attributes for each route
         },
         ...
     ]
