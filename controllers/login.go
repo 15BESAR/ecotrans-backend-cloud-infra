@@ -18,7 +18,7 @@ import (
 type M map[string]interface{}
 
 func LoginUser(c *gin.Context) {
-	var userInput models.User
+	var userInput models.UserLogin
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

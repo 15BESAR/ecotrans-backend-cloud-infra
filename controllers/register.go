@@ -11,7 +11,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func checkRegisterInput(username string, email string, pass string) bool {
+func checkRegisterInput(userInput models.User) bool {
+	// check user input sex
+	if !(userInput.Sex == "m" || userInput.Sex == "f") {
+		return false
+	}
 	return true
 }
 
@@ -21,10 +25,10 @@ func RegisterUser(c *gin.Context) {
 	var userInput models.User
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No binding"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Data not complete"})
 		return
 	}
-	if !checkRegisterInput(userInput.Username, userInput.Email, userInput.Password) {
+	if !checkRegisterInput(userInput) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
 		return
 	}
