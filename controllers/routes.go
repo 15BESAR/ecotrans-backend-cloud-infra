@@ -49,19 +49,21 @@ func AutocompleteLocation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"predictions": resp.Predictions})
 }
 
-type FinalResponse struct {
-	routes            []RoutesWithCarbonCalculated `json:"routes"`
-	geocode_waypoints []maps.GeocodedWaypoint      `json:"geocode_waypoints"`
-}
-
 type RoutesWithCarbonCalculated struct {
-	carbon float32    `json:"carbon"`
-	route  maps.Route `json:"route"`
+	Carbon float32 `json:"carbon"`
+	maps.Route
 }
 
 // GET /routes
 // GET routes based on origin and destination
 func FindRoutes(c *gin.Context) {
+	// Hashmap contains multiplier of grams of co2 emission per km for each vehicle
+	multiplier := map[string]float64{
+		"WALKING":   1.2,
+		"BICYCLING": 21,
+		"DRIVING":   192,
+		"TRANSIT":   9.2,
+	}
 	fmt.Println("GET /routes")
 	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
@@ -81,20 +83,18 @@ func FindRoutes(c *gin.Context) {
 		return
 	}
 	temp := make([]RoutesWithCarbonCalculated, len(routes))
+	var sum float64 = 0
 	for i := range temp {
-		// routesWithCarbonCalculated := RoutesWithCarbonCalculated{route: routes[i], carbon: 99.48}
-		// pretty.Println(routesWithCarbonCalculated)
-		temp[i].route = routes[i]
-		temp[i].carbon = 99.48
-		// pretty.Println(temp[i])
-		// panic("test")
-
+		temp[i].Route = routes[i]
+		temp[i].Carbon = 99.48
+		for _, item := range temp[i].Legs[0].Steps {
+			sum += multiplier[item.TravelMode] * float64(item.Distance.Meters)
+		}
+		sum = 0
 	}
-	// respfinal := FinalResponse{routes: temp, geocode_waypoints: geos}
-	// pretty.Println(temp)
 	c.JSON(http.StatusOK, gin.H{
 		"geocode_waypoints": geos,
-		"routes":            routes,
+		"routes":            temp,
 	})
 }
 
