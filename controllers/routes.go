@@ -49,21 +49,53 @@ func AutocompleteLocation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"predictions": resp.Predictions})
 }
 
-type RoutesWithCarbonCalculated struct{
-	maps.Route,
-	carbon float32
+type FinalResponse struct {
+	routes            []RoutesWithCarbonCalculated `json:"routes"`
+	geocode_waypoints []maps.GeocodedWaypoint      `json:"geocode_waypoints"`
 }
+
+type RoutesWithCarbonCalculated struct {
+	carbon float32    `json:"carbon"`
+	route  maps.Route `json:"route"`
+}
+
 // GET /routes
 // GET routes based on origin and destination
 func FindRoutes(c *gin.Context) {
 	fmt.Println("GET /routes")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	b, err := ioutil.ReadFile("./controllers/dummyJSON.json") // just pass the file name
+	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
-		fmt.Print(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	c.Data(http.StatusOK, "application/json; charset=utf-8", b)
+	r := &maps.DirectionsRequest{
+		Origin:       "Summarecon Mal Bekasi",
+		Destination:  "Grand Indonesia",
+		Alternatives: true,
+		Mode:         maps.TravelModeTransit,
+		Language:     "id",
+	}
+	routes, geos, err := client.Directions(context.Background(), r)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	temp := make([]RoutesWithCarbonCalculated, len(routes))
+	for i := range temp {
+		// routesWithCarbonCalculated := RoutesWithCarbonCalculated{route: routes[i], carbon: 99.48}
+		// pretty.Println(routesWithCarbonCalculated)
+		temp[i].route = routes[i]
+		temp[i].carbon = 99.48
+		// pretty.Println(temp[i])
+		// panic("test")
+
+	}
+	// respfinal := FinalResponse{routes: temp, geocode_waypoints: geos}
+	// pretty.Println(temp)
+	c.JSON(http.StatusOK, gin.H{
+		"geocode_waypoints": geos,
+		"routes":            routes,
+	})
 }
 
 // POST /finish
