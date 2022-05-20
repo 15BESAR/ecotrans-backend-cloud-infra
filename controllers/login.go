@@ -85,8 +85,8 @@ func RefreshToken(c *gin.Context) {
 		return
 	}
 
-	if time.Unix(claims.ExpiresAt.Unix(), 0).Sub(time.Now()) > models.LOGIN_EXPIRATION_DURATION {
-		c.JSON(http.StatusBadRequest, gin.H{})
+	if time.Until(time.Unix(claims.ExpiresAt.Unix(), 0)) > models.LOGIN_EXPIRATION_DURATION {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
 		return
 	}
 
