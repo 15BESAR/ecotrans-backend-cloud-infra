@@ -54,6 +54,12 @@ type RoutesWithCarbonCalculated struct {
 	maps.Route
 }
 
+type BodyRoutes struct {
+	Origin      string `json:"origin"`
+	Destination string `json:"destination"`
+	Preference  string `json:"preference"`
+}
+
 // GET /routes
 // GET routes based on origin and destination
 func FindRoutes(c *gin.Context) {
@@ -65,16 +71,21 @@ func FindRoutes(c *gin.Context) {
 		"TRANSIT":   9.2,
 	}
 	fmt.Println("GET /routes")
+	body := BodyRoutes{}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	r := &maps.DirectionsRequest{
-		Origin:       "Summarecon Mal Bekasi",
-		Destination:  "Grand Indonesia",
+		Origin:       body.Origin,
+		Destination:  body.Destination,
 		Alternatives: true,
-		Mode:         maps.TravelModeTransit,
+		Mode:         maps.Mode(body.Preference),
 		Language:     "id",
 	}
 	routes, geos, err := client.Directions(context.Background(), r)
