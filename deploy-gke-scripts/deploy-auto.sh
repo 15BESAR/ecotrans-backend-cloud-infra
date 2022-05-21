@@ -1,8 +1,9 @@
+#!/bin/bash
 # Author : David Fauzi 
 # Desc : Script to deploy go app in GKE
 # Tested on WSL2 with Cloud SDK with project owner roles
 # To deploy, change variable if needed, then run script
-# bash deploy-gke-scripts/deploy.sh
+# bash deploy-gke-scripts/deploy.sh 
 
 # Cluster is placed in asia-southeast2-a with currently 2 nodes
 export USER_EMAIL=davidfauzi29@gmail.com
@@ -17,7 +18,6 @@ export TAG=v0.04 #Update it
 export IS_BUILD_IMAGE=true #true if wanna build container
 export IS_APPLY_GKE=true #true if wanna build container
 
-echo $IS_BUILD_IMAGE
 # Build Container and submit to container registry
 if [ "$IS_BUILD_IMAGE" == "true" ]; then
 echo "Building container image and pushing to container registry..."
