@@ -18,7 +18,7 @@ import (
 type M map[string]interface{}
 
 func LoginUser(c *gin.Context) {
-	var userInput models.User
+	var userInput models.UserLogin
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -85,8 +85,8 @@ func RefreshToken(c *gin.Context) {
 		return
 	}
 
-	if time.Unix(claims.ExpiresAt.Unix(), 0).Sub(time.Now()) > models.LOGIN_EXPIRATION_DURATION {
-		c.JSON(http.StatusBadRequest, gin.H{})
+	if time.Until(time.Unix(claims.ExpiresAt.Unix(), 0)) > models.LOGIN_EXPIRATION_DURATION {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
 		return
 	}
 

@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"net/http"
+	"net/mail"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,20 @@ import (
 	"gorm.io/gorm"
 )
 
-func checkRegisterInput(username string, email string, pass string) bool {
+func isValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
+}
+func checkRegisterInput(userInput models.User) bool {
+	// check user input sex
+	if !(userInput.Sex == "m" || userInput.Sex == "f") {
+		return false
+	}
+	// check email
+	if !isValidEmail(userInput.Email) {
+		return false
+	}
+
 	return true
 }
 
@@ -21,10 +35,10 @@ func RegisterUser(c *gin.Context) {
 	var userInput models.User
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No binding"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Data not complete"})
 		return
 	}
-	if !checkRegisterInput(userInput.Username, userInput.Email, userInput.Password) {
+	if !checkRegisterInput(userInput) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
 		return
 	}

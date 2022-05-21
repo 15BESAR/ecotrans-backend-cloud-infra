@@ -49,9 +49,15 @@ The Rest API is described below..
 `Content-Type: application/json`
 ```json
 {
-    "username": "foo",
-    "password": "123",
-    "email": "foo@foo.com",
+    "username" : "ayam41",
+    "email":"ayam41@ayam.com",
+    "firstName" : "ayam",
+    "lastName" : "lesgo",
+    "ageOfBirth" : "2000-01-01T00:00:00Z",
+    "sex" : "m",
+    "address" : "mars",
+    "occupation" : "alien",
+    "password" : "ayam123"
 }
 ```
 ### Response
