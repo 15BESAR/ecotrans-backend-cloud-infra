@@ -42,7 +42,7 @@ func main() {
 	r.DELETE("/user/:userId", controllers.DeleteUserById)
 	r.GET("/autocomplete", controllers.AutocompleteLocation)
 	r.GET("/routes", controllers.FindRoutes)
-	r.POST("/finish", controllers.AddJourney)
+	r.POST("/journey", controllers.AddJourney)
 	r.GET("/vouchers", controllers.FindVouchers)
 	r.POST("/voucher", controllers.BuyVoucher)
 	r.POST("/partner/register", controllers.RegisterPartner)

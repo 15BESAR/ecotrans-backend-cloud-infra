@@ -109,7 +109,7 @@ func FindRoutes(c *gin.Context) {
 	})
 }
 
-// POST /finish
+// POST /journey
 // add user journey
 func AddJourney(c *gin.Context) {
 	var journey models.Journey
