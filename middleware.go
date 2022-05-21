@@ -31,7 +31,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		// token := c.Request.
 		path := c.FullPath()
 
-		if !stringInSlice(path, secretPath) {
+		if stringInSlice(path, secretPath) {
 			auth := c.Request.Header.Get("Authorization")
 			if auth == "" {
 				c.String(http.StatusForbidden, "No header auth")

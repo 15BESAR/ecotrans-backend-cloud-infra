@@ -52,6 +52,9 @@ func main() {
 	r.GET("/partner/refresh", controllers.RefreshTokenPartner)
 	r.GET("/partners", controllers.FindPartners)
 	r.GET("/partner/:partnerId", controllers.FindPartnerById)
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"msg": "Path not defined, try reading the docs in ReadMe"})
+	})
 
 	// Run the server
 	r.Run()
