@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// POST /login
+// POST user/login
 // User login, return token
 
 type M map[string]interface{}
@@ -60,6 +60,8 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.UserID, "token": signedToken})
 }
 
+// POST user/refresh
+//
 func RefreshTokenUser(c *gin.Context) {
 	var input models.TokenRefresh
 	if err := c.ShouldBindJSON(&input); err != nil {

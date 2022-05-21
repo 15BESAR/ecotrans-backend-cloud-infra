@@ -23,7 +23,7 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-var secretPath []string = []string{"/user", "/users", "/routes", "/vouchers"}
+var secretPath []string = []string{"/user", "/users", "/routes", "/vouchers", "/journeys", "/journey:id"}
 
 func TokenAuthMiddleware() gin.HandlerFunc {
 
@@ -31,7 +31,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		// token := c.Request.
 		path := c.FullPath()
 
-		if stringInSlice(path, secretPath) {
+		if !stringInSlice(path, secretPath) {
 			auth := c.Request.Header.Get("Authorization")
 			if auth == "" {
 				c.String(http.StatusForbidden, "No header auth")

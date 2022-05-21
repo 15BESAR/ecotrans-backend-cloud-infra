@@ -30,7 +30,7 @@ func checkRegisterInput(userInput models.User) bool {
 	return true
 }
 
-// POST /register
+// POST /user/register
 // Register user
 func RegisterUser(c *gin.Context) {
 	var userInput models.User

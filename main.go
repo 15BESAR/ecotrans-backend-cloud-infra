@@ -33,9 +33,9 @@ func main() {
 	// Routes
 	r.GET("/", root)
 	r.GET("/version", getVersion)
-	r.POST("/register", controllers.RegisterUser)
-	r.POST("/login", controllers.LoginUser)
-	r.POST("/login/refresh", controllers.RefreshTokenUser)
+	r.POST("/user/register", controllers.RegisterUser)
+	r.POST("/user/login", controllers.LoginUser)
+	r.POST("/user/refresh", controllers.RefreshTokenUser)
 	r.GET("/users", controllers.FindUsers)
 	r.GET("/user/:userId", controllers.FindUserById)
 	r.PUT("/user/:userId", controllers.UpdateUserById)
@@ -49,7 +49,7 @@ func main() {
 	r.POST("/voucher", controllers.BuyVoucher)
 	r.POST("/partner/register", controllers.RegisterPartner)
 	r.POST("/partner/login", controllers.LoginPartner)
-	r.GET("/partner/login/refresh", controllers.RefreshTokenPartner)
+	r.GET("/partner/refresh", controllers.RefreshTokenPartner)
 	r.GET("/partners", controllers.FindPartners)
 	r.GET("/partner/:partnerId", controllers.FindPartnerById)
 
