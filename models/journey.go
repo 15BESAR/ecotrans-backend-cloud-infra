@@ -8,14 +8,14 @@ import (
 )
 
 type Journeys struct {
-	journeyID         string    `json:"journeyID" gorm:"primaryKey"`
-	userID            string    `json:"journeyID" gorm:"primaryKey"`
-	StartDate         time.Time `json:"start_date" binding:"required"`
-	EndDate           time.Time `json:"end_date" binding:"required"`
+	JourneyID         string    `json:"journeyId" gorm:"primaryKey"`
+	UserID            string    `json:"userId" gorm:"primaryKey"`
+	StartDate         time.Time `json:"startDate" binding:"required"`
+	EndDate           time.Time `json:"endDate" binding:"required"`
 	Origin            string    `json:"origin" binding:"required"`
 	Destination       string    `json:"destination" binding:"required"`
-	DistanceTravelled float64   `json:"distance_travelled" binding:"required"`
-	EmissionSaved     float64   `json:"emission_saved" binding:"required"`
+	DistanceTravelled float64   `json:"distanceTravelled" binding:"required"`
+	EmissionSaved     float64   `json:"emissionSaved" binding:"required"`
 	Reward            int       `json:"reward" binding:"required"`
 }
 
