@@ -7,7 +7,7 @@ import (
 
 type Voucher struct {
 	VoucherID   string `json:"voucherId" gorm:"primaryKey"`
-	PartnerID   string `json:"partnerId" binding:"required"`
+	PartnerID   string `json:"partnerId" binding:"required" FK`
 	VoucherName string `json:"voucherName" binding:"required"`
 	VoucherDesc string `json:"voucherDesc" binding:"required"`
 	Category    string `json:"category" binding:"required"`

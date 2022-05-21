@@ -51,24 +51,10 @@ func FindUserById(c *gin.Context) {
 // update user data with userid
 func UpdateUserById(c *gin.Context) {
 	fmt.Println("GET /user/:userid")
-	fmt.Println("User ID:", string(c.Param("userId")))
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	var stringData string = `
-	{
-		"firstName": "fname",
-		"lastName": "lname",
-		"ageOfBirth": "10-03-2000",
-		"age": 21,
-		"sex": "m/f",
-		"address": "lorem ipsum...",
-		"occupation": "student",
-		"point": 10202,
-		"totalRedeem" : 100,
-		"totalDistance" : 2023.5,
-		"totalEmissionReduced" : 500,
-		"badge" : 0
-	}
-	`
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	// Bind body
+
+	// check if data valid
+	// Update to DB
+	// Return User Information
+	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte("test"))
 }

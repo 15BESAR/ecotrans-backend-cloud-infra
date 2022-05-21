@@ -9,7 +9,7 @@ import (
 
 type Journey struct {
 	JourneyID         string    `json:"journeyId" gorm:"primaryKey"`
-	UserID            string    `json:"userId"`
+	UserID            string    `json:"userId" binding:"required" FK`
 	StartDate         time.Time `json:"startDate" binding:"required"`
 	EndDate           time.Time `json:"endDate" binding:"required"`
 	Origin            string    `json:"origin" binding:"required"`

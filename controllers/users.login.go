@@ -60,7 +60,7 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.UserID, "token": signedToken})
 }
 
-func RefreshToken(c *gin.Context) {
+func RefreshTokenUser(c *gin.Context) {
 	var input models.TokenRefresh
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
