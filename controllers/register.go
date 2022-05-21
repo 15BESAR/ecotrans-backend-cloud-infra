@@ -9,7 +9,6 @@ import (
 	"github.com/bearbin/go-age"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kr/pretty"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -44,7 +43,6 @@ func RegisterUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
 		return
 	}
-	pretty.Println(userInput)
 	err := models.Db.Where("username = ? OR email = ?", userInput.Username, userInput.Email).First(&databaseInput).Error
 
 	switch {
@@ -59,9 +57,7 @@ func RegisterUser(c *gin.Context) {
 		databaseInput.Password = string(hashedPassword)
 		// Count Age
 		databaseInput.Age = age.Age(databaseInput.BirthDate)
-		pretty.Println(databaseInput)
 		result := models.Db.Session(&gorm.Session{SkipHooks: false}).Create(&databaseInput)
-
 		if result.Error != nil {
 			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
 			return
