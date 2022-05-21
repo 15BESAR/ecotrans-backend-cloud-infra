@@ -6,6 +6,7 @@ require github.com/labstack/echo/v4 v4.7.2
 
 require (
 	github.com/bearbin/go-age v0.0.0-20210220235509-f0fa00c278ce // indirect
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect

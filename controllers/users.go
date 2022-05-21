@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
+	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kr/pretty"
 )
 
 // GET /users
@@ -51,10 +53,31 @@ func DeleteUserById(c *gin.Context) {
 // update user data with userid
 func UpdateUserById(c *gin.Context) {
 	fmt.Println("GET /user/:userid")
-	// Bind body
+	var input models.UserUpdate
+	var user models.User
 
+	// Find user
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+	// Bind body, Validate Input
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	// check if data valid
+	if err := validateUpdateUserInput(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pretty.Println(input)
 	// Update to DB
-	// Return User Information
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte("test"))
+	models.Db.Model(&user).Updates(structs.Map(input))
+	c.JSON(http.StatusOK, user)
+
+}
+
+func validateUpdateUserInput(input *models.UserUpdate) error {
+	return nil
 }

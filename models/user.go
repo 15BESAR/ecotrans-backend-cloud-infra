@@ -28,14 +28,24 @@ type User struct {
 	Age             int       `json:"age"`
 	Gender          string    `json:"gender" gorm:"default:null"`
 	Job             string    `json:"job" gorm:"default:null"`
-	Points          string    `json:"points" gorm:"default:null"`
+	Points          int       `json:"points" gorm:"default:0"`
 	VoucherInterest string    `json:"voucherInterest" gorm:"default:null"`
 	Domicile        string    `json:"domicile" gorm:"default:null"`
 	Education       string    `json:"education" gorm:"default:null"`
-	MarriageStatus  string    `json:"marriageStatus" gorm:"default:null"`
-	Income          string    `json:"income" gorm:"default:null"`
+	MarriageStatus  bool      `json:"marriageStatus" gorm:"default:null"`
+	Income          int       `json:"income" gorm:"default:0"`
 	Vehicle         string    `json:"vehicle" gorm:"default:null"`
 	Journeys        []Journey `gorm:"foreignKey:UserID;references:UserID"`
+}
+
+type UserUpdate struct {
+	Job             string `json:"job" gorm:"default:null"`
+	VoucherInterest string `json:"voucherInterest" gorm:"default:null"`
+	Domicile        string `json:"domicile" gorm:"default:null"`
+	Education       string `json:"education" gorm:"default:null"`
+	MarriageStatus  bool   `json:"marriageStatus" gorm:"default:null"`
+	Income          int    `json:"income" gorm:"default:0"`
+	Vehicle         string `json:"vehicle" gorm:"default:null"`
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) error {

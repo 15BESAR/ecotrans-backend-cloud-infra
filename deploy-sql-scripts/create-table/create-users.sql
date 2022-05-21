@@ -14,7 +14,7 @@ CREATE TABLE users(
     voucher_interest VARCHAR(500),
     domicile VARCHAR(50),
     education VARCHAR(50),
-    marriage_status VARCHAR(20),
+    marriage_status BOOLEAN,
     income INT,
     vehicle VARCHAR(25)
 );
