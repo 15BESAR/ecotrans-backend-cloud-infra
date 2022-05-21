@@ -2,27 +2,21 @@
 	"info": {
 		"_postman_id": "22df2fc1-5221-4b6a-a447-41dbc77b9369",
 		"name": "ecoTrans-Go-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11781459"
 	},
 	"item": [
 		{
 			"name": "POST /register",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"fname\",\r\n    \"lastName\": \"lname\",\r\n    \"ageOfBirth\": \"10-03-2000\",\r\n    \"age\": 21,\r\n    \"sex\": \"m/f\",\r\n    \"address\": \"lorem ipsum...\",\r\n    \"occupation\": \"student\",\r\n}",
+					"raw": "{\r\n    \"username\" : \"davidfauzi\",\r\n    \"email\":\"davidfauzi@gmail.com\",\r\n      \"password\" : \"kekekesiu\",\r\n    \"firstName\" : \"david\",\r\n    \"lastName\" : \"fauzi\",\r\n    \"birthDate\" : \"2001-01-01T00:00:00Z\"\r\n  \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\"\r\n}",
+					"raw": "{\r\n    \"username\": \"ayam\",\r\n    \"password\": \"ayam123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -71,6 +65,36 @@
 		},
 		{
 			"name": "GET /users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /login/refresh",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -131,6 +155,34 @@
 		},
 		{
 			"name": "PUT /user/:userid",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"job\": \"Student\",\r\n    \"voucherInterest\": \"foodAndBeverage,tranportation,phoneCredit\",\r\n    \"domicile\": \"Bandung\",\r\n    \"education\": \"Bachelor\",\r\n    \"marriageStatus\": false,\r\n    \"income\": 2500000,\r\n    \"vehicle\": \"car\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/085cd574-92bb-4607-94f0-31d707a5c3a8",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"085cd574-92bb-4607-94f0-31d707a5c3a8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /user/:userid",
 			"request": {
 				"method": "PUT",
 				"header": [],
