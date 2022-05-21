@@ -16,15 +16,13 @@ import (
 // User login, return token
 
 func LoginPartner(c *gin.Context) {
-	var userInput models.UserLogin
-	var databaseInput models.User
+	var userInput models.PartnerLogin
+	var databaseInput models.Partner
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// err := models.Db.QueryRow("SELECT id, username, password FROM users WHERE username=?", userInput.Username).Scan(&databaseInput.Id, &databaseInput.Username, &databaseInput.Password)
 	err := models.Db.Where("username = ?", userInput.Username).First(&databaseInput).Error
-
 	if err != nil {
 		c.JSON(http.StatusMovedPermanently, gin.H{"error": "No username"})
 		return
@@ -55,7 +53,7 @@ func LoginPartner(c *gin.Context) {
 		return
 	}
 	json.Marshal(M{"token": signedToken})
-	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.UserID, "token": signedToken})
+	c.JSON(http.StatusOK, gin.H{"partnerId": databaseInput.PartnerID, "token": signedToken})
 }
 
 // GET /partner/login/refresh
