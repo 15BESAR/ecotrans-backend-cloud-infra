@@ -113,5 +113,18 @@ func FindRoutes(c *gin.Context) {
 // add user journey
 func AddJourney(c *gin.Context) {
 	var journey models.Journey
-
+	// bind body
+	if err := c.ShouldBindJSON(&journey); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// Check if user exist
+	var user models.User
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+	// add journey
+	models.Db.Create(&journey)
+	c.JSON(http.StatusOK, journey)
 }

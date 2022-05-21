@@ -8,6 +8,9 @@ import (
 type Partner struct {
 	PartnerID   string    `json:"partnerId" gorm:"primaryKey"`
 	PartnerName string    `json:"partnerName" binding:"required"`
+	Email       string    `json:"email" gorm:"unique" binding:"required"`
+	Username    string    `json:"username" gorm:"unique" binding:"required"`
+	Password    string    `json:"password" binding:"required"`
 	Vouchers    []Voucher `gorm:"foreignKey:PartnerID;references:PartnerID"`
 }
 
