@@ -6,8 +6,9 @@ import (
 )
 
 type Partner struct {
-	PartnerId   string `json:"partnerId" gorm:"primaryKey"`
-	PartnerName string `json:"partnerName" binding:"required"`
+	PartnerId   string    `json:"partnerId" gorm:"primaryKey"`
+	PartnerName string    `json:"partnerName" binding:"required"`
+	Vouchers    []Voucher `gorm:"foreignKey:VoucherID"`
 }
 
 func (partner *Partner) BeforeCreate(tx *gorm.DB) error {
