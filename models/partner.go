@@ -5,12 +5,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type Partners struct {
+type Partner struct {
 	PartnerId   string `json:"partnerId" gorm:"primaryKey"`
 	PartnerName string `json:"partnerName"`
 }
 
-func (partner *Partners) BeforeCreate(tx *gorm.DB) error {
+func (partner *Partner) BeforeCreate(tx *gorm.DB) error {
 	partner.PartnerId = uuid.New().String()
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Journeys struct {
+type Journey struct {
 	JourneyID         string    `json:"journeyId" gorm:"primaryKey"`
 	UserID            string    `json:"userId" gorm:"primaryKey"`
 	StartDate         time.Time `json:"startDate" binding:"required"`
@@ -19,7 +19,7 @@ type Journeys struct {
 	Reward            int       `json:"reward" binding:"required"`
 }
 
-func (journey *Journeys) BeforeCreate(tx *gorm.DB) error {
+func (journey *Journey) BeforeCreate(tx *gorm.DB) error {
 	journey.journeyID = uuid.New().String()
 	return nil
 }
