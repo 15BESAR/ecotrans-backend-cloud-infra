@@ -53,7 +53,7 @@ func main() {
 	// CRUD Vouchers
 	r.GET("/vouchers", controllers.FindVouchers)
 	r.POST("/voucher", controllers.AddVoucher)
-	r.GET("/voucher/:voucherId", controllers.FindVoucherById)
+	r.GET("/voucher/:voucherId", controllers.FindVoucherByVoucherId)
 	r.PUT("/voucher/:voucherId", controllers.UpdateVoucherById)
 	r.DELETE("/voucher/:voucherId", controllers.DeleteVoucherById)
 	// Purchase Voucher API

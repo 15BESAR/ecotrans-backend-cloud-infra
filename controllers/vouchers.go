@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
@@ -48,28 +47,25 @@ func AddVoucher(c *gin.Context) {
 }
 
 // GET /voucher/:voucherId
-// GET Partner By ID
-func FindVoucherById(c *gin.Context) {
-	var partner models.Partner
-	if err := models.Db.Where("partner_id = ?", c.Param("partnerId")).First(&partner).Error; err != nil {
+// GET Partner By Voucher ID
+func FindVoucherByVoucherId(c *gin.Context) {
+	var voucher models.Voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
 		return
 	}
-	models.Db.Delete(&partner)
-
-	c.JSON(http.StatusOK, gin.H{"msg": "user deleted"})
+	c.JSON(http.StatusOK, voucher)
 }
 
 // PUT /voucher/:userid
 // update voucher data by partner
 func UpdateVoucherById(c *gin.Context) {
-	fmt.Println("GET /user/:userid")
-	var input models.UserUpdate
-	var user models.User
+	var input models.Voucher
+	var voucher models.Voucher
 
-	// Find user
-	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+	// Find voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
 		return
 	}
 	// Bind body, Validate Input
@@ -78,26 +74,30 @@ func UpdateVoucherById(c *gin.Context) {
 		return
 	}
 	// check if data valid
-	if err := validateUpdateUserInput(&input); err != nil {
+	if err := validateUpdateVoucherInput(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	pretty.Println(input)
+	input.VoucherID = c.Param("voucherId")
 	// Update to DB
-	models.Db.Model(&user).Updates(structs.Map(input))
-	c.JSON(http.StatusOK, user)
+	models.Db.Model(&voucher).Updates(structs.Map(input))
+	c.JSON(http.StatusOK, voucher)
 
 }
 
 // DELETE /voucher/:voucherId
 // Delete Partner By ID
 func DeleteVoucherById(c *gin.Context) {
-	var partner models.Partner
-	if err := models.Db.Where("partner_id = ?", c.Param("partnerId")).First(&partner).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
+	var voucher models.Voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
 		return
 	}
-	models.Db.Delete(&partner)
+	models.Db.Delete(&voucher)
 
-	c.JSON(http.StatusOK, gin.H{"msg": "user deleted"})
+	c.JSON(http.StatusOK, gin.H{"msg": "Voucher deleted"})
+}
+
+func validateUpdateVoucherInput(input *models.Voucher) error {
+	return nil
 }
