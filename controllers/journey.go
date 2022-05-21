@@ -129,3 +129,11 @@ func AddJourney(c *gin.Context) {
 	models.Db.Create(&journey)
 	c.JSON(http.StatusOK, journey)
 }
+
+// GET /journeys
+// get All user journey
+func FindAllJourneys(c *gin.Context) {
+	var journeys []models.Journey
+	models.Db.Find(&journeys)
+	c.JSON(http.StatusOK, gin.H{"journeys": journeys})
+}
