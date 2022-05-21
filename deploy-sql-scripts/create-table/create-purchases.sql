@@ -1,4 +1,5 @@
-USE capstone-instance;
+USE capstone;
+
 CREATE TABLE purchases(
     user_id CHAR(36) NOT NULL,
     voucher_id CHAR(36) NOT NULL,

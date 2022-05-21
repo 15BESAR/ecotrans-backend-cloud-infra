@@ -5,6 +5,7 @@ go 1.18
 require github.com/labstack/echo/v4 v4.7.2
 
 require (
+	github.com/bearbin/go-age v0.0.0-20210220235509-f0fa00c278ce // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -15,6 +16,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.1.1 // indirect
+	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
@@ -28,6 +30,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect

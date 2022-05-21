@@ -57,7 +57,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 	json.Marshal(M{"token": signedToken})
-	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.Id, "token": signedToken})
+	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.UserID, "token": signedToken})
 }
 
 func RefreshToken(c *gin.Context) {

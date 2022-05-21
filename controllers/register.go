@@ -6,8 +6,10 @@ import (
 	"net/mail"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
+	"github.com/bearbin/go-age"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kr/pretty"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -17,10 +19,10 @@ func isValidEmail(email string) bool {
 	return err == nil
 }
 func checkRegisterInput(userInput models.User) bool {
-	// check user input sex
-	if !(userInput.Sex == "m" || userInput.Sex == "f") {
-		return false
-	}
+	// check user input sex -> move it to PUT /user to complete all user data
+	// if !(userInput.Gender == "m" || userInput.Gender == "f") {
+	// 	return false
+	// }
 	// check email
 	if !isValidEmail(userInput.Email) {
 		return false
@@ -42,6 +44,7 @@ func RegisterUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
 		return
 	}
+	pretty.Println(userInput)
 	err := models.Db.Where("username = ? OR email = ?", userInput.Username, userInput.Email).First(&databaseInput).Error
 
 	switch {
@@ -51,11 +54,15 @@ func RegisterUser(c *gin.Context) {
 			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
 			return
 		}
-
+		// Update Hashed password
 		databaseInput = userInput
 		databaseInput.Password = string(hashedPassword)
-		models.Db.Create(&databaseInput)
-		if err != nil {
+		// Count Age
+		databaseInput.Age = age.Age(databaseInput.BirthDate)
+		pretty.Println(databaseInput)
+		result := models.Db.Session(&gorm.Session{SkipHooks: false}).Create(&databaseInput)
+
+		if result.error != nil {
 			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
 			return
 		}
