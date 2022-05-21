@@ -3,10 +3,10 @@ package controllers
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
 	"googlemaps.github.io/maps"
 )
@@ -112,8 +112,6 @@ func FindRoutes(c *gin.Context) {
 // POST /finish
 // add user journey
 func AddJourney(c *gin.Context) {
-	fmt.Println("POST /finish")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	c.JSON(http.StatusOK, gin.H{"msg": "data saved successfully"})
+	var journey models.Journey
+
 }
