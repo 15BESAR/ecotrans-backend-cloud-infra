@@ -83,5 +83,5 @@ func root(c *gin.Context) {
 }
 
 func getVersion(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"version": "0.5", "lastUpdate": "May 22"})
+	c.JSON(http.StatusOK, gin.H{"version": "0.50", "lastUpdate": "May 21"})
 }
