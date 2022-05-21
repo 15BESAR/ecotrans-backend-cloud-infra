@@ -44,6 +44,7 @@ func main() {
 	r.GET("/routes", controllers.FindRoutes)
 	r.GET("/journeys", controllers.FindAllJourneys)
 	r.POST("/journey", controllers.AddJourney)
+	r.GET("/journey/:journeyId", controllers.FindJourneyById)
 	r.GET("/vouchers", controllers.FindVouchers)
 	r.POST("/voucher", controllers.BuyVoucher)
 	r.POST("/partner/register", controllers.RegisterPartner)

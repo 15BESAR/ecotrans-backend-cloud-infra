@@ -137,3 +137,14 @@ func FindAllJourneys(c *gin.Context) {
 	models.Db.Find(&journeys)
 	c.JSON(http.StatusOK, gin.H{"journeys": journeys})
 }
+
+// GET /journey/:journeyId
+// get All user journey
+func FindJourneyById(c *gin.Context) {
+	var journey models.Journey
+	if err := models.Db.Where("journey_id = ?", c.Param("journeyId")).First(&journey).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Journey not found!"})
+		return
+	}
+	c.JSON(http.StatusOK, journey)
+}
