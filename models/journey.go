@@ -9,7 +9,7 @@ import (
 
 type Journey struct {
 	JourneyID         string    `json:"journeyId" gorm:"primaryKey"`
-	UserID            string    `json:"userId" gorm:"primaryKey"`
+	UserID            string    `json:"userId"`
 	StartDate         time.Time `json:"startDate" binding:"required"`
 	EndDate           time.Time `json:"endDate" binding:"required"`
 	Origin            string    `json:"origin" binding:"required"`
@@ -20,6 +20,6 @@ type Journey struct {
 }
 
 func (journey *Journey) BeforeCreate(tx *gorm.DB) error {
-	journey.journeyID = uuid.New().String()
+	journey.JourneyID = uuid.New().String()
 	return nil
 }

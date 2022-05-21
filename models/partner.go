@@ -7,7 +7,7 @@ import (
 
 type Partner struct {
 	PartnerId   string `json:"partnerId" gorm:"primaryKey"`
-	PartnerName string `json:"partnerName"`
+	PartnerName string `json:"partnerName" binding:"required"`
 }
 
 func (partner *Partner) BeforeCreate(tx *gorm.DB) error {

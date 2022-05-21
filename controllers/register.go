@@ -62,7 +62,7 @@ func RegisterUser(c *gin.Context) {
 		pretty.Println(databaseInput)
 		result := models.Db.Session(&gorm.Session{SkipHooks: false}).Create(&databaseInput)
 
-		if result.error != nil {
+		if result.Error != nil {
 			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
 			return
 		}
