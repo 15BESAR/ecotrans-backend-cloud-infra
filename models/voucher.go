@@ -8,12 +8,13 @@ import (
 type Voucher struct {
 	VoucherID   string `json:"voucherId" gorm:"primaryKey"`
 	PartnerID   string `json:"partnerId" binding:"required" FK`
+	PartnerName string `json:"partnerName" binding:"required"`
 	VoucherName string `json:"voucherName" binding:"required"`
 	VoucherDesc string `json:"voucherDesc" binding:"required"`
 	Category    string `json:"category" binding:"required"`
-	ImageUrl    string `json:"imageUrl" binding:"required"`
-	Stock       string `json:"stock" binding:"required"`
-	Price       string `json:"price" binding:"required"`
+	ImageUrl    string `json:"imageUrl" default:"https://storage.googleapis.com/voucher-images-2909/jco.jpg"`
+	Stock       int    `json:"stock" binding:"required"`
+	Price       int    `json:"price" binding:"required"`
 }
 
 func (voucher *Voucher) BeforeCreate(tx *gorm.DB) error {
