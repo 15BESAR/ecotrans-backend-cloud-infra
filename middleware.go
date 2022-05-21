@@ -23,7 +23,7 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-var secretPath []string = []string{"/user", "/users"}
+var secretPath []string = []string{"/user", "/users", "/routes", "/vouchers"}
 
 func TokenAuthMiddleware() gin.HandlerFunc {
 
