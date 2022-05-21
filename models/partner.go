@@ -5,6 +5,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type PartnerLogin struct {
+	Email    string `gorm:"unique" json:"email"`
+	Username string `gorm:"unique" json:"username"`
+	Password string `json:"password" binding:"required"`
+}
+
 type Partner struct {
 	PartnerID   string    `json:"partnerId" gorm:"primaryKey"`
 	PartnerName string    `json:"partnerName" binding:"required"`

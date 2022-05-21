@@ -15,7 +15,6 @@ import (
 // POST /partner/login
 // User login, return token
 
-// type M map[string]interface{}
 func LoginPartner(c *gin.Context) {
 	var userInput models.UserLogin
 	var databaseInput models.User
