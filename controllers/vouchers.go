@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/fatih/structs"
@@ -14,6 +15,18 @@ import (
 func FindVouchers(c *gin.Context) {
 	var vouchers []models.Voucher
 	models.Db.Find(&vouchers)
+	// Check if there's query
+	queryCompany, isQueryCompany := c.GetQuery("company")
+	if isQueryCompany {
+		queryCompany = strings.ToLower(queryCompany)
+		temp := make([]models.Voucher, 0)
+		for _, voucher := range vouchers {
+			if strings.ToLower(voucher.PartnerName) == queryCompany {
+				temp = append(temp, voucher)
+			}
+		}
+		vouchers = temp
+	}
 	c.JSON(http.StatusOK, gin.H{"vouchers": vouchers})
 }
 
@@ -100,4 +113,10 @@ func DeleteVoucherById(c *gin.Context) {
 
 func validateUpdateVoucherInput(input *models.Voucher) error {
 	return nil
+}
+
+func RemoveIndex(s []models.Voucher, index int) []models.Voucher {
+	ret := make([]models.Voucher, 0)
+	ret = append(ret, s[:index]...)
+	return append(ret, s[index+1:]...)
 }
