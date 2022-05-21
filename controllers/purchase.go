@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
@@ -10,22 +11,21 @@ import (
 // GET /purchases
 // GET ALL Purchases
 func FindAllPurchases(c *gin.Context) {
-	var journey models.Journey
-	// bind body
-	if err := c.ShouldBindJSON(&journey); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+	var purchases []models.Purchase
+	models.Db.Find(&purchases)
+	// Check if there's query
+	queryUser, isQueryUser := c.GetQuery("user")
+	if isQueryUser {
+		queryUser = strings.ToLower(queryUser)
+		temp := make([]models.Purchase, 0)
+		for _, purchase := range purchases {
+			if strings.ToLower(purchase.UserID) == queryUser {
+				temp = append(temp, purchase)
+			}
+		}
+		purchases = temp
 	}
-	// Check if user exist
-	var user models.User
-	if err := models.Db.Where("user_id = ?", journey.UserID).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
-		return
-	}
-	// in the future maybe add checker to prevent double data
-	// add journey
-	models.Db.Create(&journey)
-	c.JSON(http.StatusOK, journey)
+	c.JSON(http.StatusOK, gin.H{"purchases": purchases})
 }
 
 // POST /purchase
