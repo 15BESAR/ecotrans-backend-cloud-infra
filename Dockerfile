@@ -4,7 +4,7 @@ FROM golang:1.16-alpine
 
 WORKDIR /app
 
-ENV GO_ENV=dev
+ENV GIN_MODE=release
 
 COPY go.mod ./
 COPY go.sum ./
