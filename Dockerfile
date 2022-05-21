@@ -4,8 +4,6 @@ FROM golang:1.16-alpine
 
 WORKDIR /app
 
-ENV GIN_MODE=release
-
 COPY go.mod ./
 COPY go.sum ./
 # COPY *.go ./
