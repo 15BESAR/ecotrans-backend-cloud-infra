@@ -16,7 +16,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"davidfauzi\",\r\n    \"email\":\"davidfauzi@gmail.com\",\r\n      \"password\" : \"kekekesiu\",\r\n    \"firstName\" : \"david\",\r\n    \"lastName\" : \"fauzi\",\r\n    \"birthDate\" : \"2001-01-01T00:00:00Z\"\r\n  \r\n}",
+					"raw": "{\r\n    \"username\" : \"davidfauzi\",\r\n    \"password\" : \"kekekesiu\",\r\n    \"email\":\"davidfauzi@gmail.com\",\r\n    \"firstName\" : \"david\",\r\n    \"lastName\" : \"fauzi\",\r\n    \"birthDate\" : \"2001-01-01T00:00:00Z\"\r\n  \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -43,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"ayam\",\r\n    \"password\": \"ayam123\"\r\n}",
+					"raw": "{\r\n    \"username\" : \"davidfauzi\",\r\n    \"password\" : \"kekekesiu\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -64,16 +64,13 @@
 			"response": []
 		},
 		{
-			"name": "GET /users",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "POST /refresh",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczMDgzMywidXNlcm5hbWUiOiJheWFtNDExMSJ9.hXOW16Y0aKpUojBvR3_BI6sKfnRSUjUjmgNglIIL2GM\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,24 +78,34 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/users",
+					"raw": "localhost:8080/refresh",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users"
+						"refresh"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "POST /login/refresh",
+			"name": "GET /users",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczMDgzMywidXNlcm5hbWUiOiJheWFtNDExMSJ9.hXOW16Y0aKpUojBvR3_BI6sKfnRSUjUjmgNglIIL2GM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -129,11 +136,21 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczNjMzNiwidXNlcm5hbWUiOiJkYXZpZGZhdXppIn0.byILeoSWZXHb3GEXzlf_wai_o8_aK1QeOCPLwjq8sjs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"foo\",\r\n    \"password\": \"123\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,13 +158,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/users",
+					"raw": "localhost:8080/user/d06d8777-896e-4a74-8f81-7b530b17f9db",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users"
+						"user",
+						"d06d8777-896e-4a74-8f81-7b530b17f9db"
 					]
 				}
 			},
@@ -156,6 +174,16 @@
 		{
 			"name": "PUT /user/:userid",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczNjMzNiwidXNlcm5hbWUiOiJkYXZpZGZhdXppIn0.byILeoSWZXHb3GEXzlf_wai_o8_aK1QeOCPLwjq8sjs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -168,14 +196,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/085cd574-92bb-4607-94f0-31d707a5c3a8",
+					"raw": "localhost:8080/user/d06d8777-896e-4a74-8f81-7b530b17f9db",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"085cd574-92bb-4607-94f0-31d707a5c3a8"
+						"d06d8777-896e-4a74-8f81-7b530b17f9db"
 					]
 				}
 			},
@@ -184,7 +212,7 @@
 		{
 			"name": "DELETE /user/:userid",
 			"request": {
-				"method": "PUT",
+				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -196,14 +224,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/user/123",
+					"raw": "localhost:8080/user/5d372746-18bd-4d14-b249-5fcdd3f9030c",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"123"
+						"5d372746-18bd-4d14-b249-5fcdd3f9030c"
 					]
 				}
 			},
@@ -219,7 +247,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"input\": \"jalan su\"\r\n}",
+					"raw": "{\r\n    \"input\": \"jalan tubagus depan 76\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -249,7 +277,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"input\": \"jalan su\"\r\n}",
+					"raw": "{\r\n    \"origin\" : \"Jalan Tubagus Depan No 76\",\r\n    \"destination\" : \"Borma Dago\",\r\n    \"preference\" : \"walking\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -257,26 +285,26 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/autocomplete",
+					"raw": "localhost:8080/routes",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"autocomplete"
+						"routes"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "POST /finish",
+			"name": "POST /journey",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"origin\": \"ChIJl02Bz3GMaS4RCgefgFZdKtI\", // gmaps place_id\r\n    \"destination\": \"ChIJY9TrwiH0aS4RrvGqlZvI_Mw\",\r\n    \"startTime\": \"2018-12-10T13:49:51.141Z\",\r\n    \"finishTime\": \"2018-12-10T16:49:51.141Z\",\r\n    \"distanceTravelled\" : 10.43, // in km\r\n    \"carbonSaved\" : 4.45, // in g co2\r\n    \"rewards\" : 102 // in point \r\n}",
+					"raw": "{\r\n    \"userId\": \"d06d8777-896e-4a74-8f81-7b530b17f9db\",\r\n    \"origin\": \"ChIJl02Bz3GMaS4RCgefgFZdKtI\",\r\n    \"destination\": \"ChIJY9TrwiH0aS4RrvGqlZvI_Mw\",\r\n    \"startTime\": \"2018-12-10T13:49:51.141Z\",\r\n    \"finishTime\": \"2018-12-10T16:49:51.141Z\",\r\n    \"distanceTravelled\" : 10.43,\r\n    \"emissionSaved\" : 4.45, \r\n    \"reward\" : 102 \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -284,13 +312,94 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/finish",
+					"raw": "localhost:8080/journey",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"finish"
+						"journey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /journey:id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczNjMzNiwidXNlcm5hbWUiOiJkYXZpZGZhdXppIn0.byILeoSWZXHb3GEXzlf_wai_o8_aK1QeOCPLwjq8sjs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"d06d8777-896e-4a74-8f81-7b530b17f9db\",\r\n    \"origin\": \"ChIJl02Bz3GMaS4RCgefgFZdKtI\",\r\n    \"destination\": \"ChIJY9TrwiH0aS4RrvGqlZvI_Mw\",\r\n    \"startTime\": \"2018-12-10T13:49:51.141Z\",\r\n    \"finishTime\": \"2018-12-10T16:49:51.141Z\",\r\n    \"distanceTravelled\" : 10.43,\r\n    \"emissionSaved\" : 4.45, \r\n    \"reward\" : 102 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/journey/c0a40aa9-3a3e-4408-8183-801a6306b207",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"journey",
+						"c0a40aa9-3a3e-4408-8183-801a6306b207"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /journeys",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1MzczNjMzNiwidXNlcm5hbWUiOiJkYXZpZGZhdXppIn0.byILeoSWZXHb3GEXzlf_wai_o8_aK1QeOCPLwjq8sjs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"d06d8777-896e-4a74-8f81-7b530b17f9db\",\r\n    \"origin\": \"ChIJl02Bz3GMaS4RCgefgFZdKtI\",\r\n    \"destination\": \"ChIJY9TrwiH0aS4RrvGqlZvI_Mw\",\r\n    \"startTime\": \"2018-12-10T13:49:51.141Z\",\r\n    \"finishTime\": \"2018-12-10T16:49:51.141Z\",\r\n    \"distanceTravelled\" : 10.43,\r\n    \"emissionSaved\" : 4.45, \r\n    \"reward\" : 102 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/journeys",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"journeys"
 					]
 				}
 			},
@@ -299,16 +408,32 @@
 		{
 			"name": "GET /vouchers",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/vouchers",
+					"raw": "localhost:8080/vouchers?company=Tokopedia",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"vouchers"
+					],
+					"query": [
+						{
+							"key": "company",
+							"value": "Tokopedia"
+						}
 					]
 				}
 			},
@@ -317,11 +442,21 @@
 		{
 			"name": "POST /voucher",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"voucherId\": \"c2njbn4\"\r\n}",
+					"raw": "{\r\n    \"partnerID\": \"7afc5909-2411-4f9b-8c65-1abc40ce9217\",\r\n    \"partnerName\": \"Tokopedia\",\r\n    \"voucherName\":\"Free Ongkir 10 Ribu\",\r\n    \"voucherDesc\": \"Gratis Ongkir sebesar 10 ribu untuk pembelian barang melalui aplikasi tokopedia\",\r\n    \"category\": \"ecommerce\",\r\n    \"imageUrl\":\"https://storage.googleapis.com/voucher-images-2909/jco.jpg\",\r\n    \"stock\" :10,\r\n    \"price\" : 1000\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -336,6 +471,484 @@
 					"port": "8080",
 					"path": [
 						"voucher"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /voucher/:voucherId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"voucherId\": \"c2njbn4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/voucher/3186039b-f24a-48c9-898f-f2f3660a27ad",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"voucher",
+						"3186039b-f24a-48c9-898f-f2f3660a27ad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /voucher/:voucherId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"partnerID\": \"7afc5909-2411-4f9b-8c65-1abc40ce9217\",\r\n    \"partnerName\": \"Tokopedia\",\r\n    \"voucherName\":\"Free Ongkir 15 Ribu\",\r\n    \"voucherDesc\": \"Gratis Ongkir sebesar 10 ribu untuk pembelian barang melalui aplikasi tokopedia\",\r\n    \"category\": \"ecommerce\",\r\n    \"imageUrl\":\"https://storage.googleapis.com/voucher-images-2909/jco.jpg\",\r\n    \"stock\" :10,\r\n    \"price\" : 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/voucher/3186039b-f24a-48c9-898f-f2f3660a27ad",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"voucher",
+						"3186039b-f24a-48c9-898f-f2f3660a27ad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /voucher/:voucherId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"voucherId\": \"c2njbn4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/voucher/3186039b-f24a-48c9-898f-f2f3660a27ad",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"voucher",
+						"3186039b-f24a-48c9-898f-f2f3660a27ad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /purchases",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/purchases",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /purchases/:purchaseId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/purchase/a6533cb5-5349-443a-b395-8f771787e1fd",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchase",
+						"a6533cb5-5349-443a-b395-8f771787e1fd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /purchases/:purchaseId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/purchase/a6533cb5-5349-443a-b395-8f771787e1fd",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchase",
+						"a6533cb5-5349-443a-b395-8f771787e1fd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /purchase",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"d06d8777-896e-4a74-8f81-7b530b17f9db\",\r\n    \"voucherId\":\"f0e21e1d-6ce6-450b-a115-e7c50c006d3b\",\r\n    \"buyDate\":\"2018-12-10T13:49:51.141Z\",\r\n    \"buyQuantity\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/purchase",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /company/register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"fauzi\",\r\n    \"password\" : \"3123121312\",\r\n    \"email\":\"fauzi@gmail.com\",    \r\n    \"partnerName\" : \"Tokopedia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/company/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"company",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /company/login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"fauzi\",\r\n    \"password\" : \"3123121312\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/company/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"company",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /company/refresh",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/company/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"company",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /partners",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/partners",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"partners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /partner/:partnerId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/partner/7483b434-f948-4273-a588-5c494e04b6ea",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"partner",
+						"7483b434-f948-4273-a588-5c494e04b6ea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /partner/:partnerId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/partner/7483b434-f948-4273-a588-5c494e04b6ea",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"partner",
+						"7483b434-f948-4273-a588-5c494e04b6ea"
 					]
 				}
 			},
