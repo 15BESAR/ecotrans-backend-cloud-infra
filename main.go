@@ -39,6 +39,7 @@ func main() {
 	r.GET("/users", controllers.FindUsers)
 	r.GET("/user/:userId", controllers.FindUserById)
 	r.PUT("/user/:userId", controllers.UpdateUserById)
+	r.DELETE("/user/:userId", controllers.DeleteUserById)
 	r.GET("/autocomplete", controllers.AutocompleteLocation)
 	r.GET("/routes", controllers.FindRoutes)
 	r.POST("/finish", controllers.AddJourney)
