@@ -3,10 +3,10 @@ package controllers
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
 	"googlemaps.github.io/maps"
 )
@@ -109,11 +109,42 @@ func FindRoutes(c *gin.Context) {
 	})
 }
 
-// POST /finish
+// POST /journey
 // add user journey
 func AddJourney(c *gin.Context) {
-	fmt.Println("POST /finish")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	c.JSON(http.StatusOK, gin.H{"msg": "data saved successfully"})
+	var journey models.Journey
+	// bind body
+	if err := c.ShouldBindJSON(&journey); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// Check if user exist
+	var user models.User
+	if err := models.Db.Where("user_id = ?", journey.UserID).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+	// in the future maybe add checker to prevent double data
+	// add journey
+	models.Db.Create(&journey)
+	c.JSON(http.StatusOK, journey)
+}
+
+// GET /journeys
+// get All user journey
+func FindAllJourneys(c *gin.Context) {
+	var journeys []models.Journey
+	models.Db.Find(&journeys)
+	c.JSON(http.StatusOK, gin.H{"journeys": journeys})
+}
+
+// GET /journey/:journeyId
+// get All user journey
+func FindJourneyById(c *gin.Context) {
+	var journey models.Journey
+	if err := models.Db.Where("journey_id = ?", c.Param("journeyId")).First(&journey).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Journey not found!"})
+		return
+	}
+	c.JSON(http.StatusOK, journey)
 }

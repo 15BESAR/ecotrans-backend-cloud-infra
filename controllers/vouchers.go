@@ -1,41 +1,116 @@
 package controllers
 
 import (
-	"fmt"
-	"io/ioutil"
 	"net/http"
+	"strings"
 
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
+	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
+	"github.com/kr/pretty"
 )
 
 // GET /vouchers
 // find all voucher
 func FindVouchers(c *gin.Context) {
-	fmt.Println("POGET /vouchers")
-	var stringData string = `
-	{
-		"vouchers":[
-			{
-				"voucherId":"c2njbn4",
-				"name":"Free 3 donut",
-				"category":"food and beverages",
-				"description": "free 3 donut berlaku untuk seluruh cabang Jco",
-				"image": "https://storage.googleapis.com/voucher-images-2909/jco.jpg",
-				"partner": "Jco",
-				"price" : 1000,
-				"expire date": "2018-12-10T16:49:51.141Z"
+	var vouchers []models.Voucher
+	models.Db.Find(&vouchers)
+	// Check if there's query
+	queryCompany, isQueryCompany := c.GetQuery("company")
+	if isQueryCompany {
+		queryCompany = strings.ToLower(queryCompany)
+		temp := make([]models.Voucher, 0)
+		for _, voucher := range vouchers {
+			if strings.ToLower(voucher.PartnerName) == queryCompany {
+				temp = append(temp, voucher)
 			}
-		]
+		}
+		vouchers = temp
 	}
-	`
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	c.JSON(http.StatusOK, gin.H{"vouchers": vouchers})
 }
 
 // POST /voucher
-// buy voucher
-func BuyVoucher(c *gin.Context) {
-	fmt.Println("POST /voucher")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	c.JSON(http.StatusOK, gin.H{"msg": "Purchase Successful !", "pointRemaining": 2000})
+// Add voucher by partner
+func AddVoucher(c *gin.Context) {
+	var voucher models.Voucher
+	// bind body
+	if err := c.ShouldBindJSON(&voucher); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// Check if partner exist
+	var partner models.Partner
+	if err := models.Db.Where("partner_id = ?", voucher.PartnerID).First(&partner).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
+		return
+	}
+	// Check if voucher name is same and partner name is the same, then don't add
+	if err := models.Db.Where("partner_name = ? AND voucher_name = ?", voucher.PartnerName, voucher.VoucherName).First(&voucher).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher Already Exist!"})
+		return
+	}
+	// in the future maybe add checker to prevent double data
+	// add journey
+	result := models.Db.Create(&voucher)
+	pretty.Println(voucher)
+	pretty.Println(result.Error)
+	pretty.Println(result.RowsAffected)
+	c.JSON(http.StatusOK, voucher)
+}
+
+// GET /voucher/:voucherId
+// GET Partner By Voucher ID
+func FindVoucherByVoucherId(c *gin.Context) {
+	var voucher models.Voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
+		return
+	}
+	c.JSON(http.StatusOK, voucher)
+}
+
+// PUT /voucher/:userid
+// update voucher data by partner
+func UpdateVoucherById(c *gin.Context) {
+	var input models.Voucher
+	var voucher models.Voucher
+
+	// Find voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
+		return
+	}
+	// Bind body, Validate Input
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// check if data valid
+	if err := validateUpdateVoucherInput(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	input.VoucherID = c.Param("voucherId")
+	// Update to DB
+	models.Db.Model(&voucher).Updates(structs.Map(input))
+	c.JSON(http.StatusOK, voucher)
+
+}
+
+// DELETE /voucher/:voucherId
+// Delete Partner By ID
+func DeleteVoucherById(c *gin.Context) {
+	var voucher models.Voucher
+	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
+		return
+	}
+	models.Db.Delete(&voucher)
+
+	c.JSON(http.StatusOK, gin.H{"msg": "Voucher deleted"})
+}
+
+func validateUpdateVoucherInput(input *models.Voucher) error {
+	return nil
 }

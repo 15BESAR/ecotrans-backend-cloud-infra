@@ -10,6 +10,12 @@ Try accessing API with http://34.101.186.107
 ## Backend and Cloud Tech Stack
 Backend created with Go with gin framework, containerization with docker and cloud build, ingress load balancing with nginx, and deployed on Google Kubernetes Engine (GKE)
 
+### Notes (For Android Dev)
+For current implementation, there's API that's already implementated but not included in the docs because it's intended for debugging/testing only. You also don't have to use all the API listed (eg: you only use read and delete but we'll provide whole CRUD API anyway). 
+
+### Notes (For ML Dev)
+Current implementation doesn't utilize ML since the models haven't been deployed yet, please confirm the deployment strategy ASAP to ease the integration process between ML backend and endpoint in the future  
+
 ## Run Locally
 ### Using Go Run
 dev
@@ -42,26 +48,50 @@ bash deploy-gke-scripts/deploy-auto.sh
 
 # API Documentation
 The Rest API is described below..
-## Register User
-### Request
+## Root and Versioning
+### 1. Root 
+#### Request
+`GET /`
+`Accept: application/json`
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+  "msg": "Ecotrans GO Backend API"
+}
+```
+### 2. Version 
+#### Request
+`GET /version`
+`Accept: application/json`
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+  "lastUpdate": "May 21",
+  "version": "0.50"
+}
+```
+## User Authentication
+### 3. Register Account
+#### Request
 `POST /register`
 `Accept: application/json`
 `Content-Type: application/json`
 ```json
 {
-    "username" : "ayam41",
-    "email":"ayam41@ayam.com",
-    "firstName" : "ayam",
-    "lastName" : "lesgo",
-    "ageOfBirth" : "2000-01-01T00:00:00Z",
-    "sex" : "m",
-    "address" : "mars",
-    "occupation" : "alien",
-    "password" : "ayam123"
+    "username" : "davidfauzi",
+    "password" : "kekekesiu",
+    "email":"davidfauzi@gmail.com",
+    "firstName" : "david",
+    "lastName" : "fauzi",
+    "birthDate" : "2001-01-01T00:00:00Z"
+  
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS 
+#### :white_check_mark: Success Response
 `HTTP 201 OK`
 `Content-type: application/json`
 ```json
@@ -69,166 +99,162 @@ The Rest API is described below..
     "status" : "Account has been created",
 }
 ```
-#### :red_circle: FAILED
-`HTTP 500 Bad Request`
-`Content-type: application/json`
-```json
-{
-   "error": "<Username / Email / both> has been taken"
-}
-```
-## User Login
-### Request
+
+### 4. User Login
+#### Request
 `POST /login`
 `Accept: application/json`
 `Content-Type: application/json`
 ```json
 {
-    "username": "foo",
-    "password": "123"
+    "username" : "davidfauzi",
+    "password" : "kekekesiu"
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "userId": 132312312,
-    "token": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc1MTExNSwidXNlcm5hbWUiOiJkYXZpZGZhdXppIn0.neR6lbT79PG1rs98feVwvhWftU_YcfDWSpzkh3bGJYw",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db"
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "username/password is incorrect"
-}
-```
-## Refresh Token
-### Post
+
+### 5. Refresh Token
+### Request
 `Post /refresh`
 `Accept: application/json`
 `Content-Type: application/json`
 ```json
 {
-    "token" : "asjbfosanfnsa"
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+}
+```
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsx2az5cCI6Ik...",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db"
 }
 ```
 
-## GET All Profile Data
-### Request
+## Users
+### 6. Get All Users
+#### Request
 `GET /users`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "users":[
+    "users": [
         {
-            "firstName": "fname",
-            "lastName": "lname",
-            "ageOfBirth": "10-03-2000",
+            "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+            "email": "davidfauzi@gmail.com",
+            "username": "davidfauzi",
+            "password": "$2a$10$Iy63y2dLid.vVad6XMZcseRpXB.3J4Jn5FftMkE92fOdQngk6k9gm",
+            "firstName": "david",
+            "lastName": "fauzi",
+            "birthDate": "2001-01-01T00:00:00Z",
             "age": 21,
-            "sex": "m/f",
-            "address": "lorem ipsum...",
-            "occupation": "student",
-            "point": 10202,
-            "totalRedeem" : 100,
-            "totalDistance" : 2023.5,
-            "totalEmissionReduced" : 500,
-            "badge" : 0
+            "gender": "",
+            "job": "Student",
+            "points": 40000,
+            "voucherInterest": "foodAndBeverage,tranportation,phoneCredit",
+            "domicile": "Bandung",
+            "education": "Bachelor",
+            "marriageStatus": false,
+            "income": 2500000,
+            "vehicle": "car",
+            "Journeys": null
         },
-        ...
     ]
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "Authorization failed"
-}
-```
 
-## GET User Profile Data
-### Request
-`GET /user/<userId>`
+### 7. Get User By ID
+#### Request
+`GET /user/:userId`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "firstName": "fname",
-    "lastName": "lname",
-    "ageOfBirth": "10-03-2000",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "email": "davidfauzi@gmail.com",
+    "username": "davidfauzi",
+    "password": "$2a$10$Iy63y2dLid.vVad6XMZcseRpXB.3J4Jn5FftMkE92fOdQngk6k9gm",
+    "firstName": "david",
+    "lastName": "fauzi",
+    "birthDate": "2001-01-01T00:00:00Z",
     "age": 21,
-    "sex": "m/f",
-    "address": "lorem ipsum...",
-    "occupation": "student",
-    "point": 10202,
-    "totalRedeem" : 100,
-    "totalDistance" : 2023.5,
-    "totalEmissionReduced" : 500,
-    "badge" : 0
-}
-```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "Authorization failed/user not found"
+    "gender": "",
+    "job": "Student",
+    "points": 40000,
+    "voucherInterest": "foodAndBeverage,tranportation,phoneCredit",
+    "domicile": "Bandung",
+    "education": "Bachelor",
+    "marriageStatus": false,
+    "income": 2500000,
+    "vehicle": "car",
+    "Journeys": null
 }
 ```
 
-## Update User Profile Data
-### Request
-`PUT /user/<userId>`
+### 8. Update User Profile By ID
+#### Request
+`PUT /user/:userId`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
 ```json
 {
-    "firstName": "fname",
-    "lastName": "lname",
-    "ageOfBirth": "10-03-2000",
-    "age": 21,
-    ...
+    "job": "Student",
+    "voucherInterest": "foodAndBeverage,tranportation,phoneCredit",
+    "domicile": "Bandung",
+    "education": "Bachelor",
+    "marriageStatus": false,
+    "income": 2500000,
+    "vehicle": "car"
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "firstName": "fname",
-    "lastName": "lname",
-    "ageOfBirth": "10-03-2000",
-    "age": 21,
-    ...
-}
-```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "Authorization failed/user not found/update data not valid"
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "email": "davidfauzi@gmail.com",
+    "username": "davidfauzi",
+    "password": "$2a$10$Iy63y2dLid.vVad6XMZcseRpXB.3J4Jn5FftMkE92fOdQngk6k9gm",
+    ..... 
 }
 ```
 
-## AutoComplete Gmaps API
-### Request
+### 9. Delete User Profile By ID
+#### Request
+`DELETE /user/:userId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "msg": "user deleted"
+}
+```
+## Maps and Journey
+### 10. AutoComplete Gmaps API
+#### Request
 `GET /autocomplete`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
@@ -238,30 +264,19 @@ The Rest API is described below..
     "input": "jalan su"
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
     "predictions" : [
-        {"text" : "Jalan sudirman"},
-        {"text" : "Jalan sutomo"},
-        {"text" : "Jalan sukajadi"},
-    ] // from highest confidence level to lowest
-}
-```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "Authorization failed"
+        // The same as Gmaps Autocomplete API, read the documentation
+    ] 
 }
 ```
 
-## GET All Alternative Route
-### Request
+### 11. Get All Alternative Route
+#### Request
 `GET /routes`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
@@ -273,33 +288,46 @@ The Rest API is described below..
     "preference" : "walking"
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
+    "geocode_waypoints":[
+    ],
     "routes":[
-        {
-        // most likely the same as gmaps direction api documentation response,
-        // but i'll add carbon attributes for each route
-        },
-        ...
-    ]
+    ] // The same as Gmaps Direction API, with addition of carbon in each route object
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
+### 12. Get All Journeys
+#### Request
+`GET /journeys`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "msg": "Authorization failed/place doesn't exist/route doesnt exist"
+    "journeys": [
+        {
+            "journeyId": "0a881751-3bb0-4ec0-9652-82241a8ba5f6",
+            "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+            "startTime": "2018-12-10T13:49:51Z",
+            "finishTime": "2018-12-10T16:49:51Z",
+            "origin": "ChIJl02Bz3GMaS4RCgefgFZdKtI",
+            "destination": "ChIJY9TrwiH0aS4RrvGqlZvI_Mw",
+            "distanceTravelled": 10.43,
+            "emissionSaved": 4.45,
+            "reward": 102
+        },
+    ]
 }
 ```
-
-## Finish Journey
-### Request
-`POST /finish`
+### 13. Finish Journey
+#### Request
+`POST /journey`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
@@ -314,97 +342,334 @@ The Rest API is described below..
     "rewards" : 102 // in point 
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "msg": "data saved successfully"
+    "journeyId": "c06404e8-6d87-46a1-9049-13ec12d887ce",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "startTime": "2018-12-10T13:49:51.141Z",
+    "finishTime": "2018-12-10T16:49:51.141Z",
+    "origin": "ChIJl02Bz3GMaS4RCgefgFZdKtI",
+    "destination": "ChIJY9TrwiH0aS4RrvGqlZvI_Mw",
+    "distanceTravelled": 10.43,
+    "emissionSaved": 4.45,
+    "reward": 102
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
+### 14. Get Journey By ID
+#### Request
+`GET /journey/:journeyId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "msg": "Authorization failed/data not valid"
+    "journeyId": "c06404e8-6d87-46a1-9049-13ec12d887ce",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "startTime": "2018-12-10T13:49:51.141Z",
+    ...
 }
 ```
-
-## Get All Vouchers
-### Request
-`GET /vouchers`
+## Voucher
+### 15. Get All Vouchers
+#### Request
+`GET /vouchers?company=tokopedia`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+There's optional query string company=<partner_name> to filter the data
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "vouchers": [
+        {
+            "voucherId": "f0e21e1d-6ce6-450b-a115-e7c50c006d3b",
+            "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+            "partnerName": "Tokopedia",
+            "voucherName": "Free Ongkir 10 Ribu",
+            "voucherDesc": "Gratis Ongkir sebesar 10 ribu untuk pembelian barang melalui aplikasi tokopedia",
+            "category": "ecommerce",
+            "imageUrl": "https://storage.googleapis.com/voucher-images-2909/jco.jpg",
+            "stock": 0,
+            "price": 1000
+        },
+    ]
+}
+```
+### 16. Get Voucher By ID
+#### Request
+`GET /voucher/:voucherId`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-   "vouchers":[
-       {
-           "voucherId":"c2njbn4",
-           "name":"Free 3 donut",
-           "category":"food and beverages",
-           "description": "free 3 donut berlaku untuk seluruh cabang Jco",
-           "image": "https://storage.googleapis.com/voucher-images-2909/jco.jpg",
-           "partner": "Jco",
-           "price" : 1000,
-           "expire date": "2018-12-10T16:49:51.141Z"
-       },
-       ... // listed from most to least recommended
-   ]
+    "voucherId": "f0e21e1d-6ce6-450b-a115-e7c50c006d3b",
+    "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "partnerName": "Tokopedia",
+    "voucherName": "Free Ongkir 10 Ribu",
+    ...
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
-`Content-type: application/json`
-```json
-{
-    "msg": "Authorization failed"
-}
-```
-
-## Buy Voucher
-### Request
+### 17. Add Voucher
+#### Request
 `POST /voucher`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
 ```json
 {
-    "voucherId": "c2njbn4"
+    "partnerID": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "partnerName": "Tokopedia",
+    "voucherName":"Free Ongkir 15 Ribu",
+    "voucherDesc": "Gratis Ongkir sebesar 10 ribu untuk pembelian barang melalui aplikasi tokopedia",
+    "category": "ecommerce",
+    "imageUrl":"https://storage.googleapis.com/voucher-images-2909/jco.jpg",
+    "stock" :10,
+    "price" : 1000
 }
 ```
-### Response
-#### :white_check_mark: SUCCESS
+#### :white_check_mark: Success Response
 `HTTP 200 OK`
 `Content-type: application/json`
 ```json
 {
-    "msg": "Purchase Successful !",
-    "pointRemaining":2000
+    "voucherId": "c07489a6-05c0-4511-a34e-33297d406bd2",
+    "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "partnerName": "Tokopedia",
+    "voucherName": "Free Ongkir 15 Ribu",
+    ...
 }
 ```
-#### :red_circle: FAILED
-`HTTP 400 Bad Request`
+### 18. Update Voucher
+#### Request
+`PUT /voucher/:voucherId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
 ```json
 {
-    "msg": "Authorization failed/Stock empty"
+    "partnerID": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "partnerName": "Tokopedia",
+    "voucherName":"Free Ongkir 15 Ribu",
+    ... // Same parameter
+```
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "voucherId": "c07489a6-05c0-4511-a34e-33297d406bd2",
+    "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    ... //Same object
+}
+```
+### 19. Delete Voucher
+#### Request
+`DELETE /voucher/:voucherId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "msg": "Purchase deleted"
 }
 ```
 
-## Other Optional API 
-### Get Air Quality Forecast
-request air quality prediction for destination location 
+## Purchase Voucher API
+### 20. Purchase Voucher
+#### Request
+`POST /purchase`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+`Content-type: application/json`
+```json
+{
+    "userId":"d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "voucherId":"f0e21e1d-6ce6-450b-a115-e7c50c006d3b",
+    "buyDate":"2018-12-10T13:49:51.141Z",
+    "buyQuantity":1
+}
+```
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "purchaseId": "678dd157-e5fe-4b0c-b36d-e0bbe4b2b6f7",
+    "voucherId": "f0e21e1d-6ce6-450b-a115-e7c50c006d3b",
+    "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+    "buyDate": "2018-12-10T13:49:51.141Z",
+    "buyQuantity": 1,
+    "voucherStockRemaining": 14,
+    "userPointsRemaining": 39000
+}
+```
+
+### 21. Get All Purchases History
+#### Request
+`GET /purchases?user=d06d8777-8..`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+There's optional query string user=<user_id> to filter the data
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "purchases": [
+        {
+            "purchaseId": "678dd157-e5fe-4b0c-b36d-e0bbe4b2b6f7",
+            "voucherId": "f0e21e1d-6ce6-450b-a115-e7c50c006d3b",
+            "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
+            "buyDate": "2018-12-10T13:49:51Z",
+            "buyQuantity": 1
+        },
+    ]
+}
+```
+
+## Partner Authentication API (Intended for Future Ongoing Admin Website)
+### 22. Register Account
+#### Request
+`POST /company/register`
+`Accept: application/json`
+`Content-Type: application/json`
+```json
+{
+    "username" : "fauzi",
+    "password" : "3123121312",
+    "email":"fauzi@gmail.com",    
+    "partnerName" : "Tokopedia"
+}
+```
+#### :white_check_mark: Success Response
+`HTTP 201 OK`
+`Content-type: application/json`
+```json
+{
+    "status" : "Account has been created",
+}
+```
+
+### 23. User Login
+#### Request
+`POST /company/login`
+`Accept: application/json`
+`Content-Type: application/json`
+```json
+{
+    "username" : "fauzi",
+    "password" : "3123121312"
+}
+```
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV.."
+}
+```
+
+### 24. Refresh Token
+### Request
+`Post /company/refresh`
+`Accept: application/json`
+`Content-Type: application/json`
+```json
+{
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+}
+```
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ.."
+}
+```
+
+## Partners
+### 25. Get All Users
+#### Request
+`GET /users`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "partners": [
+        {
+            "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+            "partnerName": "Tokopedia",
+            "email": "fauzi@gmail.com",
+            "username": "fauzi",
+            "password": "$2a$10$ASL2wvRHY8fIr3v8x2D/WOuLTcb2Nf5hVppZSz0EquAUsu1gJD48C",
+            "Vouchers": null
+        },
+    ]
+}
+```
+
+### 26. Get User By ID
+#### Request
+`GET /user/:partnerId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "partnerId": "7afc5909-2411-4f9b-8c65-1abc40ce9217",
+    "partnerName": "Tokopedia",
+    "email": "fauzi@gmail.com",
+    "username": "fauzi",
+    "password": "$2a$10$ASL2wvRHY8fIr3v8x2D/WOuLTcb2Nf5hVppZSz0EquAUsu1gJD48C",
+    "Vouchers": null
+}
+```
+
+### 27. Delete User Profile By ID
+#### Request
+`DELETE /user/:partnerId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+
+#### :white_check_mark: Success Response
+`HTTP 200 OK`
+`Content-type: application/json`
+```json
+{
+    "msg": "user deleted"
+}
+```
+
+## Future Ongoing API
+### ML-Related API to Connect ML Endpoint and Android Such as :
+- GET Air Quality, Temperate, and UV prediction for a location 
+- GET Voucher recommendation for current user
 ### Change Password
 ### Forgot Password
-### Add Voucher 
-### Update Voucher
-### Delete Voucher
-### API for Admin Dashboard Website
+
+## Future Development
+Will try to create Website including landing page, partner login/register, and 
+dashboard to add/update/delete voucher. For current plan, tech stacks used will be NextJs, Typescript, Redux, Tailwind and will be deployed on Google App Engine
+
 

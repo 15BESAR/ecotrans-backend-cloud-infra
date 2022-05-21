@@ -30,19 +30,49 @@ func main() {
 	// Middleware
 	r.Use(TokenAuthMiddleware())
 
-	// Routes
+	// API ROUTE
+	// Root and Version
 	r.GET("/", root)
+	r.GET("/version", getVersion)
+	// Auth User
 	r.POST("/register", controllers.RegisterUser)
 	r.POST("/login", controllers.LoginUser)
-	r.POST("/login/refresh", controllers.RefreshToken)
+	r.POST("/refresh", controllers.RefreshTokenUser)
+	// CRUD User
 	r.GET("/users", controllers.FindUsers)
 	r.GET("/user/:userId", controllers.FindUserById)
 	r.PUT("/user/:userId", controllers.UpdateUserById)
+	r.DELETE("/user/:userId", controllers.DeleteUserById)
+	// GMAPS API
 	r.GET("/autocomplete", controllers.AutocompleteLocation)
 	r.GET("/routes", controllers.FindRoutes)
-	r.POST("/finish", controllers.AddJourney)
+	// CRUD Journeys
+	r.GET("/journeys", controllers.FindAllJourneys)
+	r.POST("/journey", controllers.AddJourney)
+	r.GET("/journey/:journeyId", controllers.FindJourneyById)
+	// CRUD Vouchers
 	r.GET("/vouchers", controllers.FindVouchers)
-	r.POST("/voucher", controllers.BuyVoucher)
+	r.POST("/voucher", controllers.AddVoucher)
+	r.GET("/voucher/:voucherId", controllers.FindVoucherByVoucherId)
+	r.PUT("/voucher/:voucherId", controllers.UpdateVoucherById)
+	r.DELETE("/voucher/:voucherId", controllers.DeleteVoucherById)
+	// Purchase Voucher API
+	r.GET("/purchases", controllers.FindAllPurchases)
+	r.POST("/purchase", controllers.PurchaseVoucher)
+	r.GET("/purchase/:purchaseId", controllers.FindPurchaseById)
+	r.DELETE("/purchase/:purchaseId", controllers.DeletePurchaseById)
+	// Partner Auth API
+	r.POST("/company/register", controllers.RegisterPartner)
+	r.POST("/company/login", controllers.LoginPartner)
+	r.GET("/company/refresh", controllers.RefreshTokenPartner)
+	// CRUD Partner
+	r.GET("/partners", controllers.FindPartners)
+	r.GET("/partner/:partnerId", controllers.FindPartnerById)
+	r.DELETE("/partner/:partnerId", controllers.DeletePartnerById)
+	// Handler for wrong Path
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"msg": "Path not defined, try reading the docs in ReadMe or contact CC people"})
+	})
 
 	// Run the server
 	r.Run()
@@ -50,4 +80,8 @@ func main() {
 
 func root(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"msg": "Ecotrans GO Backend API"})
+}
+
+func getVersion(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"version": "0.50", "lastUpdate": "May 21"})
 }

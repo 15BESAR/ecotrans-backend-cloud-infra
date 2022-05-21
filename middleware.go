@@ -16,14 +16,14 @@ func respondWithError(c *gin.Context, code int, message interface{}) {
 
 func stringInSlice(a string, list []string) bool {
 	for _, b := range list {
-		if b == a {
+		if strings.Contains(a, b) {
 			return true
 		}
 	}
 	return false
 }
 
-var secretPath []string = []string{"/user", "/users"}
+var secretPath []string = []string{"/users", "/user", "/vouchers", "/voucher", "/journeys", "/journey", "/partners", "/partner", "/purchases", "/purchase"}
 
 func TokenAuthMiddleware() gin.HandlerFunc {
 

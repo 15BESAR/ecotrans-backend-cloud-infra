@@ -2,73 +2,83 @@ package controllers
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
+	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
+	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kr/pretty"
 )
 
 // GET /users
 // get all users data
 func FindUsers(c *gin.Context) {
 	fmt.Println("GET /users")
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	var stringData string = `{
-		"users": [
-		  {
-			"firstName": "fname",
-			"lastName": "lname",
-			"ageOfBirth": "10-03-2000",
-			"age": 21,
-			"sex": "m/f",
-			"address": "loremipsum...",
-			"occupation": "student",
-			"point": 10202,
-			"totalRedeem": 100,
-			"totalDistance": 2023.5,
-			"totalEmissionReduced": 500,
-			"badge": 0
-		  }
-		]
-	  }`
-	// c.JSON(http.StatusOK, gin.H(stringData))
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	var users []models.User
+	models.Db.Find(&users)
+	c.JSON(http.StatusOK, gin.H{"users": users})
 
 }
 
 // GET /user/:userid
 // get user data with userid
 func FindUserById(c *gin.Context) {
-	fmt.Println("GET /user/:userid")
-	fmt.Println("User ID:", string(c.Param("userId")))
-	var stringData string = `{"firstName":"fname","lastName":"lname","ageOfBirth":"10-03-2000","age":21,"sex":"m/f","address":"loremipsum...","occupation":"student","point":10202,"totalRedeem":100,"totalDistance":2023.5,"totalEmissionReduced":500,"badge":0}`
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	fmt.Println("GET /user/:userId")
+	var user models.User
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+
+}
+
+// DELETE /user/:userid
+// Delete user data with userid
+func DeleteUserById(c *gin.Context) {
+	fmt.Println("DELETE /user/:userId")
+	var user models.User
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+	models.Db.Delete(&user)
+
+	c.JSON(http.StatusOK, gin.H{"msg": "user deleted"})
+
 }
 
 // PUT /user/:userid
 // update user data with userid
 func UpdateUserById(c *gin.Context) {
 	fmt.Println("GET /user/:userid")
-	fmt.Println("User ID:", string(c.Param("userId")))
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	fmt.Println("Data:", string(body))
-	var stringData string = `
-	{
-		"firstName": "fname",
-		"lastName": "lname",
-		"ageOfBirth": "10-03-2000",
-		"age": 21,
-		"sex": "m/f",
-		"address": "lorem ipsum...",
-		"occupation": "student",
-		"point": 10202,
-		"totalRedeem" : 100,
-		"totalDistance" : 2023.5,
-		"totalEmissionReduced" : 500,
-		"badge" : 0
+	var input models.UserUpdate
+	var user models.User
+
+	// Find user
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
 	}
-	`
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	// Bind body, Validate Input
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// check if data valid
+	if err := validateUpdateUserInput(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pretty.Println(input)
+	// Update to DB
+	models.Db.Model(&user).Updates(structs.Map(input))
+	c.JSON(http.StatusOK, user)
+
+}
+
+func validateUpdateUserInput(input *models.UserUpdate) error {
+	return nil
 }
