@@ -59,6 +59,8 @@ func main() {
 	// Purchase Voucher API
 	r.GET("/purchases", controllers.FindAllPurchases)
 	r.POST("/purchase", controllers.PurchaseVoucher)
+	r.GET("/purchase/:purchaseId", controllers.FindPurchaseById)
+	r.DELETE("/purchase/:purchaseId", controllers.DeletePurchaseById)
 	// Partner Auth API
 	r.POST("/company/register", controllers.RegisterPartner)
 	r.POST("/company/login", controllers.LoginPartner)

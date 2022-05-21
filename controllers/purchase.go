@@ -72,3 +72,27 @@ func PurchaseVoucher(c *gin.Context) {
 	receipt := models.PurchaseReceipt{Purchase: purchase, UserPointsRemaining: user.Points, VoucherStockRemaining: voucher.Stock}
 	c.JSON(http.StatusOK, receipt)
 }
+
+// GET /purchase/:purchaseId
+// GET purchase By purchaseId
+func FindPurchaseById(c *gin.Context) {
+	var purchase models.Purchase
+	if err := models.Db.Where("purchase_id = ?", c.Param("purchaseId")).First(&purchase).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Purchase not found!"})
+		return
+	}
+	c.JSON(http.StatusOK, purchase)
+}
+
+// DELETE /voucher/:voucherId
+// Delete Partner By ID
+func DeletePurchaseById(c *gin.Context) {
+	var purchase models.Purchase
+	if err := models.Db.Where("purchase_id = ?", c.Param("purchaseId")).First(&purchase).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Purchase not found!"})
+		return
+	}
+	models.Db.Delete(&purchase)
+
+	c.JSON(http.StatusOK, gin.H{"msg": "Purchase deleted"})
+}
