@@ -54,7 +54,7 @@ func main() {
 	r.GET("/partner/:partnerId", controllers.FindPartnerById)
 	r.DELETE("/partner/:partnerId", controllers.DeletePartnerById)
 	r.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"msg": "Path not defined, try reading the docs in ReadMe"})
+		c.JSON(http.StatusOK, gin.H{"msg": "Path not defined, try reading the docs in ReadMe or contact CC people"})
 	})
 
 	// Run the server
