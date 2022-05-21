@@ -599,6 +599,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJFY29UcmFucyIsImV4cCI6MTY1Mzc0MzE3NywidXNlcm5hbWUiOiJqb2tvIn0.77SpuAIMtj8RzPt8cD8Bq07_Z--5zAgs6iZwgBryO68",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -666,9 +676,6 @@
 		},
 		{
 			"name": "DELETE /purchases/:purchaseId",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -680,7 +687,7 @@
 						}
 					]
 				},
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "raw",
