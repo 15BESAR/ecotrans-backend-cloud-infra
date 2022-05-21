@@ -114,9 +114,3 @@ func DeleteVoucherById(c *gin.Context) {
 func validateUpdateVoucherInput(input *models.Voucher) error {
 	return nil
 }
-
-func RemoveIndex(s []models.Voucher, index int) []models.Voucher {
-	ret := make([]models.Voucher, 0)
-	ret = append(ret, s[:index]...)
-	return append(ret, s[index+1:]...)
-}
