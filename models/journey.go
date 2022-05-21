@@ -11,7 +11,7 @@ type Journey struct {
 	JourneyID         string    `json:"journeyId" gorm:"primaryKey"`
 	UserID            string    `json:"userId" binding:"required" FK`
 	StartTime         time.Time `json:"startTime" binding:"required"`
-	EndTime           time.Time `json:"endTime" binding:"required"`
+	FinishTime        time.Time `json:"finishTime" binding:"required"`
 	Origin            string    `json:"origin" binding:"required"`
 	Destination       string    `json:"destination" binding:"required"`
 	DistanceTravelled float64   `json:"distanceTravelled" binding:"required"`

@@ -24,7 +24,7 @@ CREATE TABLE journeys(
     journey_id CHAR(36) NOT NULL PRIMARY KEY,
     user_id CHAR(36) NOT NULL,
     start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
+    finish_time DATETIME NOT NULL,
     origin VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,
     distance_travelled FLOAT NOT NULL,
