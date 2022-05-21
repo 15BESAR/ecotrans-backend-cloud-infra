@@ -22,10 +22,14 @@ func FindUsers(c *gin.Context) {
 // GET /user/:userid
 // get user data with userid
 func FindUserById(c *gin.Context) {
-	fmt.Println("GET /user/:userid")
-	fmt.Println("User ID:", string(c.Param("userId")))
-	var stringData string = `{"firstName":"fname","lastName":"lname","ageOfBirth":"10-03-2000","age":21,"sex":"m/f","address":"loremipsum...","occupation":"student","point":10202,"totalRedeem":100,"totalDistance":2023.5,"totalEmissionReduced":500,"badge":0}`
-	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(stringData))
+	fmt.Println("GET /user/:userId")
+	var user models.User
+	if err := models.Db.Where("user_id = ?", c.Param("userId")).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		return
+	}
+	c.JSON(http.StatusOK, user)
+
 }
 
 // PUT /user/:userid
