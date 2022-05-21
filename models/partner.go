@@ -6,12 +6,12 @@ import (
 )
 
 type Partner struct {
-	PartnerId   string    `json:"partnerId" gorm:"primaryKey"`
+	PartnerID   string    `json:"partnerId" gorm:"primaryKey"`
 	PartnerName string    `json:"partnerName" binding:"required"`
-	Vouchers    []Voucher `gorm:"foreignKey:VoucherID"`
+	Vouchers    []Voucher `gorm:"foreignKey:PartnerID;references:PartnerID"`
 }
 
 func (partner *Partner) BeforeCreate(tx *gorm.DB) error {
-	partner.PartnerId = uuid.New().String()
+	partner.PartnerID = uuid.New().String()
 	return nil
 }

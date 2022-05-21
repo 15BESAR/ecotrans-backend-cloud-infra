@@ -6,8 +6,8 @@ import (
 )
 
 type Voucher struct {
-	VoucherId   string `json:"voucherId" gorm:"primaryKey"`
-	PartnerId   string `json:"partnerId" binding:"required"`
+	VoucherID   string `json:"voucherId" gorm:"primaryKey"`
+	PartnerID   string `json:"partnerId" binding:"required"`
 	VoucherName string `json:"voucherName" binding:"required"`
 	VoucherDesc string `json:"voucherDesc" binding:"required"`
 	Category    string `json:"category" binding:"required"`
@@ -17,6 +17,6 @@ type Voucher struct {
 }
 
 func (voucher *Voucher) BeforeCreate(tx *gorm.DB) error {
-	voucher.VoucherId = uuid.New().String()
+	voucher.VoucherID = uuid.New().String()
 	return nil
 }

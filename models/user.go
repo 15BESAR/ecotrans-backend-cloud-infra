@@ -35,7 +35,7 @@ type User struct {
 	MarriageStatus  string    `json:"marriageStatus" gorm:"default:null"`
 	Income          string    `json:"income" gorm:"default:null"`
 	Vehicle         string    `json:"vehicle" gorm:"default:null"`
-	Journeys        []Journey `gorm:"foreignKey:UserID"`
+	Journeys        []Journey `gorm:"foreignKey:UserID;references:UserID"`
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) error {
