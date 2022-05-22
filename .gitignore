@@ -25,3 +25,28 @@ go.work
 
 # Some Gcloud Credential File
 cred*
+
+# NEXT JS 
+# dependencies
+webapp-nextjs/node_modules
+webapp-nextjs/.pnp
+webapp-nextjs/.pnp.js
+
+# testing
+webapp-nextjs/coverage
+
+# next.js
+webapp-nextjs/.next/
+webapp-nextjs/out/
+
+# production
+webapp-nextjs/build
+
+# misc
+webapp-nextjs.DS_Store
+webapp-nextjs.env*
+
+# debug
+webapp-next/jsnpm-debug.log*
+webapp-next/jsyarn-debug.log*
+webapp-next/jsyarn-error.log*
