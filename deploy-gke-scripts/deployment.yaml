@@ -5,7 +5,7 @@ metadata:
     app: go
   name: go-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: go
@@ -15,7 +15,7 @@ spec:
         app: go
     spec:
       containers:
-      - image: gcr.io/test-capstone-350108/go-test:v0.04
+      - image: gcr.io/test-capstone-350108/go-test:v0.52
         name: go-test
         ports:
         - containerPort: 8080
