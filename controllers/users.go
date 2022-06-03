@@ -38,7 +38,9 @@ func FindUserById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"user":  user})
 
 }
 

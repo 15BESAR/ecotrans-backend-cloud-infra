@@ -155,7 +155,7 @@ func FindAllJourneys(c *gin.Context) {
 	var journeys []models.Journey
 	models.Db.Find(&journeys)
 	c.JSON(http.StatusOK, gin.H{
-		"error":    true,
+		"error":    false,
 		"journeys": journeys})
 }
 
@@ -170,7 +170,7 @@ func FindJourneyById(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"error":   true,
+		"error":   false,
 		"journey": journey,
 	})
 }

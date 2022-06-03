@@ -29,7 +29,9 @@ func FindPartnerById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, partner)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"partner": partner})
 }
 
 // DELETE /Partner/:partnerid

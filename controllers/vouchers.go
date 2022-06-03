@@ -27,7 +27,9 @@ func FindVouchers(c *gin.Context) {
 		}
 		vouchers = temp
 	}
-	c.JSON(http.StatusOK, gin.H{"vouchers": vouchers})
+	c.JSON(http.StatusOK, gin.H{
+		"error":    false,
+		"vouchers": vouchers})
 }
 
 // POST /voucher
@@ -36,18 +38,24 @@ func AddVoucher(c *gin.Context) {
 	var voucher models.Voucher
 	// bind body
 	if err := c.ShouldBindJSON(&voucher); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	// Check if partner exist
 	var partner models.Partner
 	if err := models.Db.Where("partner_id = ?", voucher.PartnerID).First(&partner).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Partner not found!"})
 		return
 	}
 	// Check if voucher name is same and partner name is the same, then don't add
 	if err := models.Db.Where("partner_name = ? AND voucher_name = ?", voucher.PartnerName, voucher.VoucherName).First(&voucher).Error; err == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher Already Exist!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Voucher Already Exist!"})
 		return
 	}
 	// in the future maybe add checker to prevent double data
@@ -56,7 +64,9 @@ func AddVoucher(c *gin.Context) {
 	pretty.Println(voucher)
 	pretty.Println(result.Error)
 	pretty.Println(result.RowsAffected)
-	c.JSON(http.StatusOK, voucher)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"voucher": voucher})
 }
 
 // GET /voucher/:voucherId
@@ -64,10 +74,14 @@ func AddVoucher(c *gin.Context) {
 func FindVoucherByVoucherId(c *gin.Context) {
 	var voucher models.Voucher
 	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Partner not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Partner not found!"})
 		return
 	}
-	c.JSON(http.StatusOK, voucher)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"voucher": voucher})
 }
 
 // PUT /voucher/:userid
@@ -78,23 +92,31 @@ func UpdateVoucherById(c *gin.Context) {
 
 	// Find voucher
 	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Voucher not found!"})
 		return
 	}
 	// Bind body, Validate Input
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	// check if data valid
 	if err := validateUpdateVoucherInput(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	input.VoucherID = c.Param("voucherId")
 	// Update to DB
 	models.Db.Model(&voucher).Updates(structs.Map(input))
-	c.JSON(http.StatusOK, voucher)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"voucher": voucher})
 
 }
 
@@ -103,12 +125,16 @@ func UpdateVoucherById(c *gin.Context) {
 func DeleteVoucherById(c *gin.Context) {
 	var voucher models.Voucher
 	if err := models.Db.Where("voucher_id = ?", c.Param("voucherId")).First(&voucher).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Voucher not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Voucher not found!"})
 		return
 	}
 	models.Db.Delete(&voucher)
 
-	c.JSON(http.StatusOK, gin.H{"msg": "Voucher deleted"})
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Voucher deleted"})
 }
 
 func validateUpdateVoucherInput(input *models.Voucher) error {
