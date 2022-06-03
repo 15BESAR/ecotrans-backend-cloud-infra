@@ -19,18 +19,24 @@ func LoginPartner(c *gin.Context) {
 	var userInput models.PartnerLogin
 	var databaseInput models.Partner
 	if err := c.ShouldBindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	err := models.Db.Where("username = ?", userInput.Username).First(&databaseInput).Error
 	if err != nil {
-		c.JSON(http.StatusMovedPermanently, gin.H{"error": "No username"})
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "No username"})
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(databaseInput.Password), []byte(userInput.Password))
 	if err != nil {
-		c.JSON(http.StatusMovedPermanently, gin.H{"error": "Wrong Password"})
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "Wrong Password"})
 		return
 	}
 
@@ -49,11 +55,16 @@ func LoginPartner(c *gin.Context) {
 
 	signedToken, err := token.SignedString(models.JWT_SIGNATURE_KEY)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bad request"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "bad request"})
 		return
 	}
 	json.Marshal(M{"token": signedToken})
-	c.JSON(http.StatusOK, gin.H{"partnerId": databaseInput.PartnerID, "token": signedToken})
+	c.JSON(http.StatusOK, gin.H{
+		"error":     false,
+		"msg":       "Succsess login",
+		"partnerId": databaseInput.PartnerID, "token": signedToken})
 }
 
 // GET /partner/login/refresh
@@ -61,7 +72,9 @@ func LoginPartner(c *gin.Context) {
 func RefreshTokenPartner(c *gin.Context) {
 	var input models.TokenRefresh
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 
@@ -72,10 +85,14 @@ func RefreshTokenPartner(c *gin.Context) {
 	})
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			c.JSON(http.StatusUnauthorized, gin.H{})
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": true,
+			})
 			return
 		}
-		c.JSON(http.StatusBadRequest, gin.H{})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+		})
 		return
 	}
 	if !token.Valid {
@@ -84,7 +101,9 @@ func RefreshTokenPartner(c *gin.Context) {
 	}
 
 	if time.Until(time.Unix(claims.ExpiresAt.Unix(), 0)) > models.LOGIN_EXPIRATION_DURATION {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "token expired"})
 		return
 	}
 
@@ -94,9 +113,13 @@ func RefreshTokenPartner(c *gin.Context) {
 	tokenString, err := token.SignedString(models.JWT_SIGNATURE_KEY)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": true,
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"token": tokenString})
 }

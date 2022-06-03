@@ -29,12 +29,16 @@ func AutocompleteLocation(c *gin.Context) {
 	fmt.Println("GET /autocomplete")
 	body := Body{}
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	r := &maps.PlaceAutocompleteRequest{
@@ -43,10 +47,14 @@ func AutocompleteLocation(c *gin.Context) {
 	}
 	resp, err := client.PlaceAutocomplete(context.Background(), r)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"predictions": resp.Predictions})
+	c.JSON(http.StatusOK, gin.H{
+		"error":       false,
+		"predictions": resp.Predictions})
 }
 
 type RoutesWithCarbonCalculated struct {
@@ -73,12 +81,16 @@ func FindRoutes(c *gin.Context) {
 	fmt.Println("GET /routes")
 	body := BodyRoutes{}
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	r := &maps.DirectionsRequest{
@@ -90,7 +102,9 @@ func FindRoutes(c *gin.Context) {
 	}
 	routes, geos, err := client.Directions(context.Background(), r)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	temp := make([]RoutesWithCarbonCalculated, len(routes))
@@ -104,6 +118,7 @@ func FindRoutes(c *gin.Context) {
 		sum = 0
 	}
 	c.JSON(http.StatusOK, gin.H{
+		"error":             false,
 		"geocode_waypoints": geos,
 		"routes":            temp,
 	})
@@ -115,13 +130,17 @@ func AddJourney(c *gin.Context) {
 	var journey models.Journey
 	// bind body
 	if err := c.ShouldBindJSON(&journey); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   err.Error()})
 		return
 	}
 	// Check if user exist
 	var user models.User
 	if err := models.Db.Where("user_id = ?", journey.UserID).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "User not found!"})
 		return
 	}
 	// in the future maybe add checker to prevent double data
@@ -135,7 +154,9 @@ func AddJourney(c *gin.Context) {
 func FindAllJourneys(c *gin.Context) {
 	var journeys []models.Journey
 	models.Db.Find(&journeys)
-	c.JSON(http.StatusOK, gin.H{"journeys": journeys})
+	c.JSON(http.StatusOK, gin.H{
+		"error":    true,
+		"journeys": journeys})
 }
 
 // GET /journey/:journeyId
@@ -143,8 +164,13 @@ func FindAllJourneys(c *gin.Context) {
 func FindJourneyById(c *gin.Context) {
 	var journey models.Journey
 	if err := models.Db.Where("journey_id = ?", c.Param("journeyId")).First(&journey).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Journey not found!"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Journey not found!"})
 		return
 	}
-	c.JSON(http.StatusOK, journey)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   true,
+		"journey": journey,
+	})
 }

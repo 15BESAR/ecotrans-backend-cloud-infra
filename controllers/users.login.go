@@ -21,20 +21,29 @@ func LoginUser(c *gin.Context) {
 	var userInput models.UserLogin
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Cannot bind JSON Input, wrong format",
+		})
 		return
 	}
 	// err := models.Db.QueryRow("SELECT id, username, password FROM users WHERE username=?", userInput.Username).Scan(&databaseInput.Id, &databaseInput.Username, &databaseInput.Password)
 	err := models.Db.Where("username = ?", userInput.Username).First(&databaseInput).Error
 
 	if err != nil {
-		c.JSON(http.StatusMovedPermanently, gin.H{"error": "No username"})
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "No username",
+		})
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(databaseInput.Password), []byte(userInput.Password))
 	if err != nil {
-		c.JSON(http.StatusMovedPermanently, gin.H{"error": "Wrong Password"})
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "Wrong Password",
+		})
 		return
 	}
 
@@ -53,11 +62,21 @@ func LoginUser(c *gin.Context) {
 
 	signedToken, err := token.SignedString(models.JWT_SIGNATURE_KEY)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bad request"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "bad request",
+		})
 		return
 	}
 	json.Marshal(M{"token": signedToken})
-	c.JSON(http.StatusOK, gin.H{"userId": databaseInput.UserID, "token": signedToken})
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "success",
+		"loginResult": gin.H{
+			"userId": databaseInput.UserID,
+			"token":  signedToken,
+		},
+	})
 }
 
 // POST user/refresh
@@ -65,7 +84,10 @@ func LoginUser(c *gin.Context) {
 func RefreshTokenUser(c *gin.Context) {
 	var input models.TokenRefresh
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Cannot bind JSON Input, wrong format",
+		})
 		return
 	}
 
@@ -88,7 +110,10 @@ func RefreshTokenUser(c *gin.Context) {
 	}
 
 	if time.Until(time.Unix(claims.ExpiresAt.Unix(), 0)) > models.LOGIN_EXPIRATION_DURATION {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "token expired"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "token expired",
+		})
 		return
 	}
 
@@ -102,5 +127,9 @@ func RefreshTokenUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "success",
+		"token": tokenString,
+	})
 }

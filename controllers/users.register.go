@@ -36,11 +36,17 @@ func RegisterUser(c *gin.Context) {
 	var userInput models.User
 	var databaseInput models.User
 	if err := c.ShouldBindJSON(&userInput); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Data not complete"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Data not complete",
+		})
 		return
 	}
 	if !checkRegisterInput(userInput) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Wrong format"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"msg":   "Wrong format",
+		})
 		return
 	}
 	err := models.Db.Where("username = ? OR email = ?", userInput.Username, userInput.Email).First(&databaseInput).Error
@@ -49,7 +55,9 @@ func RegisterUser(c *gin.Context) {
 	case errors.Is(err, gorm.ErrRecordNotFound):
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userInput.Password), bcrypt.DefaultCost)
 		if err != nil {
-			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
+			c.JSON(500, gin.H{
+				"error": true,
+				"msg":   "Server error, unable to create your account"})
 			return
 		}
 		// Update Hashed password
@@ -59,22 +67,39 @@ func RegisterUser(c *gin.Context) {
 		databaseInput.Age = age.Age(databaseInput.BirthDate)
 		result := models.Db.Session(&gorm.Session{SkipHooks: false}).Create(&databaseInput)
 		if result.Error != nil {
-			c.JSON(500, gin.H{"error": "Server error, unable to create your account"})
+			c.JSON(500, gin.H{
+				"error": true,
+				"msg":   "Server error, unable to create your account",
+			})
 			return
 		}
 	case !errors.Is(err, gorm.ErrRecordNotFound):
 		if databaseInput.Username == userInput.Username && databaseInput.Email == userInput.Email {
-			c.JSON(500, gin.H{"error": "Username & email has been taken"})
+			c.JSON(500, gin.H{
+				"error": true,
+				"msg":   "Username & email has been taken",
+			})
 		} else if databaseInput.Username == userInput.Username {
-			c.JSON(500, gin.H{"error": "Username has been taken"})
+			c.JSON(500, gin.H{
+				"error": true,
+				"msg":   "Username has been taken",
+			})
 		} else {
-			c.JSON(500, gin.H{"error": "Email has been taken"})
+			c.JSON(500, gin.H{
+				"error": true,
+				"msg":   "Email has been taken",
+			})
 		}
 
 		return
 	default:
-		c.JSON(500, gin.H{"error": "Server error"})
+		c.JSON(500, gin.H{
+			"error": true,
+			"msg":   "Server error",
+		})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"status": "Account has been created"})
+	c.JSON(http.StatusCreated, gin.H{
+		"error":  false,
+		"status": "Account has been created"})
 }
