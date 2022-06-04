@@ -347,7 +347,7 @@ The Rest API is described below..
 
 #### Request
 
-`GET /autocomplete`
+`POST /autocomplete`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`

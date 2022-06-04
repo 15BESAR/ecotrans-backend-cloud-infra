@@ -44,7 +44,7 @@ func main() {
 	r.PUT("/user/:userId", controllers.UpdateUserById)
 	r.DELETE("/user/:userId", controllers.DeleteUserById)
 	// GMAPS API
-	r.GET("/autocomplete", controllers.AutocompleteLocation)
+	r.POST("/autocomplete", controllers.AutocompleteLocation)
 	r.GET("/routes", controllers.FindRoutes)
 	// CRUD Journeys
 	r.GET("/journeys", controllers.FindAllJourneys)

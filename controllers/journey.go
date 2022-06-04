@@ -26,7 +26,7 @@ type ResponseAutoComplete struct {
 // GET /autocomplete
 // update user data with userid
 func AutocompleteLocation(c *gin.Context) {
-	fmt.Println("GET /autocomplete")
+	fmt.Println("POST /autocomplete")
 	body := Body{}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

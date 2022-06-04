@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "22df2fc1-5221-4b6a-a447-41dbc77b9369",
+		"_postman_id": "8c575f60-2a24-4f0f-b869-98c87e410c4b",
 		"name": "ecoTrans-Go-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11781459"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -238,12 +237,9 @@
 			"response": []
 		},
 		{
-			"name": "GET /autocomplete",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "POST /autocomplete",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
