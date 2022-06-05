@@ -36,6 +36,7 @@ func FindAllPurchases(c *gin.Context) {
 // Purchase a Voucher
 func PurchaseVoucher(c *gin.Context) {
 	var purchase models.Purchase
+	var voucherPurchased models.VoucherPurchased
 	// bind body
 	if err := c.ShouldBindJSON(&purchase); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -78,15 +79,22 @@ func PurchaseVoucher(c *gin.Context) {
 		})
 		return
 	}
+
 	// Perform Purchase Transaction
 	voucher.Stock -= purchase.BuyQuantity
 	user.Points -= (purchase.BuyQuantity * voucher.Price)
 	// Update Voucher stock to DB
-	models.Db.Save(voucher)
+	models.Db.Save(&voucher)
 	// Update User Point to DB
-	models.Db.Save(user)
+	models.Db.Save(&user)
 	// Add Purchase history to DB
 	models.Db.Create(&purchase)
+
+	// create voucherPurchased
+	voucherPurchased.UserID = user.UserID
+	voucherPurchased.VoucherID = purchase.VoucherID
+	models.Db.Create(&voucherPurchased)
+
 	// Create purchase receipt
 	receipt := models.PurchaseReceipt{Purchase: purchase, UserPointsRemaining: user.Points, VoucherStockRemaining: voucher.Stock}
 	c.JSON(http.StatusOK, gin.H{

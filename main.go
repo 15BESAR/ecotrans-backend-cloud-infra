@@ -23,6 +23,11 @@ func main() {
 
 	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName, env.dbTCPHost, env.dbPort)
 	models.Db.AutoMigrate(&models.User{})
+	models.Db.AutoMigrate(&models.Voucher{})
+	models.Db.AutoMigrate(&models.VoucherPurchased{})
+	models.Db.AutoMigrate(&models.Partner{})
+	models.Db.AutoMigrate(&models.Purchase{})
+
 	if err != nil {
 		log.Fatalf("Database not opened")
 	}
