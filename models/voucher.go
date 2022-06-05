@@ -30,3 +30,7 @@ func (voucher *Voucher) BeforeCreate(tx *gorm.DB) error {
 	voucher.VoucherID = uuid.New().String()
 	return nil
 }
+
+func (voucherPurchased *VoucherPurchased) BeforeCreate(tx *gorm.DB) error {
+	return nil
+}

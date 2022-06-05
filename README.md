@@ -341,6 +341,45 @@ The Rest API is described below..
 }
 ```
 
+### 10. Get Purchase by User
+
+#### Request
+
+`GET /user/purchase/:userId`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+
+#### :white_check_mark: Success Response
+
+`HTTP 200 OK`
+`Content-type: application/json`
+
+```json
+{
+    "error": false,
+    "userId": "c00c56c4-e451-47d7-b21e-b80a0a00e53c",
+    "voucherPurchased": [
+        {
+            "ID": 1,
+            "BuyTime": "2022-06-05T14:52:07.857Z",
+            "Voucher": {
+                "voucherId": "62e7d4e5-2081-4a69-81d2-b2f7c8e32549",
+                "partnerId": "f5a7bcf7-df32-45f4-b160-4d108ec06900",
+                "partnerName": "Tokopedia",
+                "voucherName": "Free Ongkir 29 Ribu",
+                "voucherDesc": "Gratis Ongkir sebesar 29 ribu untuk pembelian barang melalui aplikasi tokopedia",
+                "category": "ecommerce",
+                "imageUrl": "https://storage.googleapis.com/voucher-images-2909/jco.jpg",
+                "stock": 98,
+                "price": 1000
+            },
+            "IsPurchased": false
+        },
+        ...
+    ]
+}
+```
+
 ## Maps and Journey
 
 ### 10. AutoComplete Gmaps API

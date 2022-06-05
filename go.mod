@@ -32,6 +32,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
+	github.com/thoas/go-funk v0.9.2 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
