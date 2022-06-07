@@ -57,6 +57,8 @@ func main() {
 	r.GET("/journeys", controllers.FindAllJourneys)
 	r.POST("/journey", controllers.AddJourney)
 	r.GET("/journey/:journeyId", controllers.FindJourneyById)
+	// Forecasting API
+	r.GET("/forecast", controllers.FindForecast)
 	// CRUD Vouchers
 	r.GET("/vouchers", controllers.FindVouchers)
 	r.POST("/voucher", controllers.AddVoucher)
