@@ -7,14 +7,14 @@
 
 # Cluster is placed in asia-southeast2-a with currently 2 nodes
 export USER_EMAIL=davidfauzi29@gmail.com
-export GCP_PROJECT=test-capstone-350108
+export GCP_PROJECT=bangkit-352613
 export COMPUTE_ZONE=asia-southeast2-a
 export CLUSTER_NAME=capstone-cluster
 export NUM_NODES=1
 export DEPLOYMENT_NAME=go-deployment
 export REPLICAS=1
 export IMAGE_NAME=go-test
-export TAG=v0.51 #Update it 
+export TAG=v1.00 #Update it 
 export IS_BUILD_IMAGE=false #true if wanna build container
 export IS_APPLY_GKE=true #true if wanna build container
 
