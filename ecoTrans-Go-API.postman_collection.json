@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8c575f60-2a24-4f0f-b869-98c87e410c4b",
+		"_postman_id": "c4e5997c-3cc1-425f-864f-ece954bd8dfc",
 		"name": "ecoTrans-Go-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11781459"
 	},
 	"item": [
 		{
@@ -264,16 +265,13 @@
 			"response": []
 		},
 		{
-			"name": "GET /routes",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "POST /routes",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"origin\" : \"Jalan Tubagus Depan No 76\",\r\n    \"destination\" : \"Borma Dago\",\r\n    \"preference\" : \"walking\"\r\n}",
+					"raw": "{\r\n  \"userId\": \"12d15016-7fc5-41f4-b643-0cd4af29b45f\",\r\n  \"origin\": \"Jalan Tubagus Depan No 76\",\r\n  \"destination\": \"Borma Dago\",\r\n  \"preference\": \"transit\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -954,6 +952,14 @@
 						"7483b434-f948-4273-a588-5c494e04b6ea"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /forecast",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
