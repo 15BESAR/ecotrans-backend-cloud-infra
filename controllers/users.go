@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
@@ -109,10 +110,19 @@ func UpdateUserById(c *gin.Context) {
 }
 
 func validateUpdateUserInput(input *models.UserUpdate) error {
-	// gender update
+	seds := reflect.ValueOf(input).Elem()
+	for i := 0; i < seds.NumField(); i++ {
+		fieldValue := seds.Field(i).String()
+		if fieldValue == "" {
+			return fmt.Errorf("%s is  empty", seds.Type().Field(i).Name)
+		}
+	}
+	// gender check
 	if input.Gender != "m" && input.Gender != "f" {
 		return errors.New("gender not in input")
 	}
+
+	// check category
 	category := [5]string{"Electronic", "Fashion", "Food", "Transportation", "Ecommerce"}
 	voucherCatSplitter := strings.Split(input.VoucherInterest, ",")
 	fmt.Println(voucherCatSplitter)
@@ -127,5 +137,18 @@ func validateUpdateUserInput(input *models.UserUpdate) error {
 			return fmt.Errorf("%s is not in category", voucName)
 		}
 	}
+
+	// check user preference
+	preference := [4]string{"walking", "bicycling", "driving", "transit"}
+	isVehicleFound := false
+	for _, prefName := range preference {
+		if prefName == input.Vehicle {
+			isVehicleFound = true
+		}
+	}
+	if !isVehicleFound {
+		return fmt.Errorf("%s is not in preferences", input.Vehicle)
+	}
+
 	return nil
 }
