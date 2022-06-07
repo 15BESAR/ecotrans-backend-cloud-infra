@@ -93,7 +93,7 @@ func FindForecast(c *gin.Context) {
 	}
 	// Get data from cache
 	regionForecasts, f := models.C.Get(region)
-	if !f || reflect.TypeOf(regionForecasts).Kind() != reflect.Slice { // Still not found inside go-cache
+	if !f || reflect.TypeOf(regionForecasts).Kind() != reflect.Slice {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"msg":   "Problem with getting forecast data"})
