@@ -68,6 +68,14 @@ bash deploy-gke-scripts/deploy-auto.sh
 
 The Rest API is described below..
 
+## Disclaimer
+
+### Valid voucher category
+category = ['Electronic', 'Fashion', 'Food', 'Transportation', 'Ecommerce']
+
+### Valid preferences transportation
+preference = {"walking","bicycling","driving","transit"}
+
 ## Root and Versioning
 
 ### 1. Root
