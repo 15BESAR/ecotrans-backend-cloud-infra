@@ -22,7 +22,7 @@ go.work
 
 # Env Variable
 .env
-
+.env.*
 # Some Gcloud Credential File
 cred*
 
