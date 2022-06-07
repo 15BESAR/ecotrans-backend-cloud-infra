@@ -293,12 +293,13 @@ The Rest API is described below..
 ```json
 {
   "job": "Student",
-  "voucherInterest": "foodAndBeverage,tranportation,phoneCredit",
+  "voucherInterest": "Electronic,Fashion,Food",
   "domicile": "Bandung",
   "education": "Bachelor",
   "marriageStatus": false,
   "income": 2500000,
-  "vehicle": "car"
+  "vehicle": "driving",
+  "gender": "m"
 }
 ```
 
@@ -422,10 +423,10 @@ The Rest API is described below..
 
 ```json
 {
-  "userId" : "d06d8777-896e-4a74-8f81-7b530b17f9db",
+  "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
   "origin": "Jalan Tubagus Depan No 76",
   "destination": "Borma Dago",
-  "preference": "walking"
+  "preference": "transit"
 }
 ```
 
@@ -444,7 +445,7 @@ The Rest API is described below..
       "reward" : 1325,
       ... // same with maps.route
     }
-  ] 
+  ]
 }
 ```
 
