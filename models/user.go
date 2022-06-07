@@ -46,6 +46,7 @@ type UserUpdate struct {
 	MarriageStatus  bool   `json:"marriageStatus" gorm:"default:null"`
 	Income          int    `json:"income" gorm:"default:0"`
 	Vehicle         string `json:"vehicle" gorm:"default:null"`
+	Gender          string `json:"gender" gorm:"default:null"`
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) error {

@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/fatih/structs"
@@ -107,5 +109,23 @@ func UpdateUserById(c *gin.Context) {
 }
 
 func validateUpdateUserInput(input *models.UserUpdate) error {
+	// gender update
+	if input.Gender != "m" && input.Gender != "f" {
+		return errors.New("gender not in input")
+	}
+	category := [5]string{"Electronic", "Fashion", "Food", "Transportation", "Ecommerce"}
+	voucherCatSplitter := strings.Split(input.VoucherInterest, ",")
+	fmt.Println(voucherCatSplitter)
+	for _, voucName := range voucherCatSplitter {
+		isCategoryFound := false
+		for _, catName := range category {
+			if voucName == catName {
+				isCategoryFound = true
+			}
+		}
+		if !isCategoryFound {
+			return fmt.Errorf("%s is not in category", voucName)
+		}
+	}
 	return nil
 }
