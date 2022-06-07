@@ -432,7 +432,7 @@ preference = {"walking","bicycling","driving","transit"}
 ```json
 {
   "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
-  "origin": "Jalan Tubagus Depan No 76",
+  "origin": "Jalan Tubagus Depan No 76" or "-6.8837471,107.6163225",
   "destination": "Borma Dago",
   "preference": "transit"
 }
@@ -456,8 +456,39 @@ preference = {"walking","bicycling","driving","transit"}
   ]
 }
 ```
+### 12. Get Forecast
 
-### 12. Get All Journeys
+#### Request
+
+`POST /forecast`
+`Accept: application/json`
+`Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
+`Content-type: application/json`
+
+```json
+{
+    "destination": "monumen nasional",
+    "arrivedHour": 5
+}
+```
+
+#### :white_check_mark: Success Response
+
+`HTTP 200 OK`
+`Content-type: application/json`
+
+```json
+{
+    "error": false,
+    "forecast": {
+        "temp": 28.338608,
+        "uv": 7.437061,
+        "aqi": 56.10105
+    }
+}
+```
+
+### 13. Get All Journeys
 
 #### Request
 
@@ -489,7 +520,8 @@ preference = {"walking","bicycling","driving","transit"}
 }
 ```
 
-### 13. Finish Journey
+
+### 14. Finish Journey
 
 #### Request
 
@@ -529,7 +561,7 @@ preference = {"walking","bicycling","driving","transit"}
 }
 ```
 
-### 14. Get Journey By ID
+### 15. Get Journey By ID
 
 #### Request
 
@@ -556,7 +588,7 @@ preference = {"walking","bicycling","driving","transit"}
 
 ## Voucher
 
-### 15. Get All Vouchers
+### 16. Get All Vouchers
 
 #### Request
 
@@ -589,7 +621,7 @@ There's optional query string company=<partner_name> to filter the data
 }
 ```
 
-### 16. Get Voucher By ID
+### 17. Get Voucher By ID
 
 #### Request
 
@@ -615,7 +647,7 @@ There's optional query string company=<partner_name> to filter the data
 }
 ```
 
-### 17. Add Voucher
+### 18. Add Voucher
 
 #### Request
 
@@ -655,7 +687,7 @@ There's optional query string company=<partner_name> to filter the data
 }
 ```
 
-### 18. Update Voucher
+### 19. Update Voucher
 
 #### Request
 
@@ -688,7 +720,7 @@ There's optional query string company=<partner_name> to filter the data
 }
 ```
 
-### 19. Delete Voucher
+### 20. Delete Voucher
 
 #### Request
 
@@ -710,7 +742,7 @@ There's optional query string company=<partner_name> to filter the data
 
 ## Purchase Voucher API
 
-### 20. Purchase Voucher
+### 21. Purchase Voucher
 
 #### Request
 
@@ -748,7 +780,7 @@ There's optional query string company=<partner_name> to filter the data
 }
 ```
 
-### 21. Get All Purchases History
+### 22. Get All Purchases History
 
 #### Request
 
@@ -780,7 +812,7 @@ There's optional query string user=<user_id> to filter the data
 
 ## Partner Authentication API (Intended for Future Ongoing Admin Website)
 
-### 22. Register Account
+### 23. Register Account
 
 #### Request
 
@@ -808,7 +840,7 @@ There's optional query string user=<user_id> to filter the data
 }
 ```
 
-### 23. User Login
+### 24. User Login
 
 #### Request
 
@@ -837,7 +869,7 @@ There's optional query string user=<user_id> to filter the data
 }
 ```
 
-### 24. Refresh Token
+### 25. Refresh Token
 
 ### Request
 
@@ -865,7 +897,7 @@ There's optional query string user=<user_id> to filter the data
 
 ## Partners
 
-### 25. Get All Users
+### 26. Get All Users
 
 #### Request
 
@@ -895,7 +927,7 @@ There's optional query string user=<user_id> to filter the data
 }
 ```
 
-### 26. Get User By ID
+### 27. Get User By ID
 
 #### Request
 
@@ -922,7 +954,7 @@ There's optional query string user=<user_id> to filter the data
 }
 ```
 
-### 27. Delete User Profile By ID
+### 28. Delete User Profile By ID
 
 #### Request
 

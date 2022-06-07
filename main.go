@@ -17,11 +17,14 @@ func main() {
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
-	// Connect to database
+	// Setup Cache
+	models.C = models.SetupCache()
 
+	// Connect to database
 	var err error
 
 	models.Db, err = models.ConnectDatabase(env.dbUser, env.dbPass, env.dbName, env.dbTCPHost, env.dbPort)
+
 	models.Db.AutoMigrate(&models.User{})
 	models.Db.AutoMigrate(&models.Voucher{})
 	models.Db.AutoMigrate(&models.VoucherPurchased{})
@@ -57,6 +60,8 @@ func main() {
 	r.GET("/journeys", controllers.FindAllJourneys)
 	r.POST("/journey", controllers.AddJourney)
 	r.GET("/journey/:journeyId", controllers.FindJourneyById)
+	// Forecasting API
+	r.POST("/forecast", controllers.FindForecast)
 	// CRUD Vouchers
 	r.GET("/vouchers", controllers.FindVouchers)
 	r.POST("/voucher", controllers.AddVoucher)

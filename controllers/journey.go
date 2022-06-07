@@ -75,11 +75,12 @@ type BodyRoutes struct {
 // GET routes based on origin and destination
 func FindRoutes(c *gin.Context) {
 	// Hashmap contains multiplier of grams of co2 emission per km for each vehicle
+	// Already adjusted with Co2 emission by mode of transport data [2018]
 	multiplier := map[string]float64{
-		"walking":   1.2,
-		"bicycling": 21,
+		"walking":   0,
+		"bicycling": 0,
 		"driving":   192,
-		"transit":   9.2,
+		"transit":   41,
 	}
 	fmt.Println("POST /routes")
 	body := BodyRoutes{}
