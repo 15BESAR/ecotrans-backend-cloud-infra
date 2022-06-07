@@ -52,7 +52,7 @@ func main() {
 	r.GET("/user/purchase/:userId", controllers.GetPurchase)
 	// GMAPS API
 	r.POST("/autocomplete", controllers.AutocompleteLocation)
-	r.GET("/routes", controllers.FindRoutes)
+	r.POST("/routes", controllers.FindRoutes)
 	// CRUD Journeys
 	r.GET("/journeys", controllers.FindAllJourneys)
 	r.POST("/journey", controllers.AddJourney)

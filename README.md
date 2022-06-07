@@ -227,7 +227,7 @@ The Rest API is described below..
       "lastName": "fauzi",
       "birthDate": "2001-01-01T00:00:00Z",
       "age": 21,
-      "gender": "",
+      "gender": "m",
       "job": "Student",
       "points": 40000,
       "voucherInterest": "foodAndBeverage,tranportation,phoneCredit",
@@ -415,13 +415,14 @@ The Rest API is described below..
 
 #### Request
 
-`GET /routes`
+`POST /routes`
 `Accept: application/json`
 `Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn...`
 `Content-type: application/json`
 
 ```json
 {
+  "userId" : "d06d8777-896e-4a74-8f81-7b530b17f9db",
   "origin": "Jalan Tubagus Depan No 76",
   "destination": "Borma Dago",
   "preference": "walking"
@@ -437,7 +438,13 @@ The Rest API is described below..
 {
   "error": false,
   "geocode_waypoints": [],
-  "routes": [] // The same as Gmaps Direction API, with addition of carbon in each route object
+  "routes": [
+    {
+      "carbon" : 132.5,
+      "reward" : 1325,
+      ... // same with maps.route
+    }
+  ] 
 }
 ```
 

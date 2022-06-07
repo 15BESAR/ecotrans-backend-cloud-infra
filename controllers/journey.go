@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"math"
 	"net/http"
 	"os"
 
@@ -59,26 +60,28 @@ func AutocompleteLocation(c *gin.Context) {
 
 type RoutesWithCarbonCalculated struct {
 	Carbon float64 `json:"carbon"`
+	Reward int     `json:"reward"`
 	maps.Route
 }
 
 type BodyRoutes struct {
+	UserId      string `json:"userId"`
 	Origin      string `json:"origin"`
 	Destination string `json:"destination"`
 	Preference  string `json:"preference"`
 }
 
-// GET /routes
+// POST /routes
 // GET routes based on origin and destination
 func FindRoutes(c *gin.Context) {
 	// Hashmap contains multiplier of grams of co2 emission per km for each vehicle
 	multiplier := map[string]float64{
-		"WALKING":   1.2,
-		"BICYCLING": 21,
-		"DRIVING":   192,
-		"TRANSIT":   9.2,
+		"walking":   1.2,
+		"bicycling": 21,
+		"driving":   192,
+		"transit":   9.2,
 	}
-	fmt.Println("GET /routes")
+	fmt.Println("POST /routes")
 	body := BodyRoutes{}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -86,6 +89,23 @@ func FindRoutes(c *gin.Context) {
 			"msg":   err.Error()})
 		return
 	}
+	var userDb models.User
+	err := models.Db.Where("user_id = ?", body.UserId).First(&userDb).Error
+	if err != nil {
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "No Id Found",
+		})
+		return
+	}
+	if _, ok := multiplier[userDb.Vehicle]; !ok {
+		c.JSON(http.StatusMovedPermanently, gin.H{
+			"error": true,
+			"msg":   "Vehicle user wrong not Input",
+		})
+		return
+	}
+
 	client, err := maps.NewClient(maps.WithAPIKey(os.Getenv("API_KEY")))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -109,13 +129,15 @@ func FindRoutes(c *gin.Context) {
 	}
 	temp := make([]RoutesWithCarbonCalculated, len(routes))
 	var sum float64 = 0
+	carbonToRewardFactor := -0.1
 	for i := range temp {
 		temp[i].Route = routes[i]
 
 		for _, item := range temp[i].Legs[0].Steps {
-			sum += (multiplier[item.TravelMode] - multiplier["DRIVING"]) * float64(item.Distance.Meters)
+			sum += (multiplier[item.TravelMode] - multiplier[userDb.Vehicle]*float64(item.Distance.Meters))
 		}
 		temp[i].Carbon = sum
+		temp[i].Reward = int(math.Max(0.0, sum*carbonToRewardFactor))
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"error":             false,
