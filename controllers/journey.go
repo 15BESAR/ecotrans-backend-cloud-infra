@@ -58,7 +58,7 @@ func AutocompleteLocation(c *gin.Context) {
 }
 
 type RoutesWithCarbonCalculated struct {
-	Carbon float32 `json:"carbon"`
+	Carbon float64 `json:"carbon"`
 	maps.Route
 }
 
@@ -111,11 +111,11 @@ func FindRoutes(c *gin.Context) {
 	var sum float64 = 0
 	for i := range temp {
 		temp[i].Route = routes[i]
-		temp[i].Carbon = 99.48
+
 		for _, item := range temp[i].Legs[0].Steps {
-			sum += multiplier[item.TravelMode] * float64(item.Distance.Meters)
+			sum += (multiplier[item.TravelMode] - multiplier["DRIVING"]) * float64(item.Distance.Meters)
 		}
-		sum = 0
+		temp[i].Carbon = sum
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"error":             false,
