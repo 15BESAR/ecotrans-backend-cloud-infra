@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/bigquery"
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/controllers"
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
@@ -17,6 +15,8 @@ func main() {
 	models.APPLICATION_NAME = env.appName
 	models.JWT_SIGNATURE_KEY = env.sigKeyJwt
 	models.PROJECT_ID = env.projectID
+	models.GOOGLE_APPLICATION_CREDENTIALS_FILE = env.GOOGLE_APPLICATION_CREDENTIALS_FILE
+	models.DATASET = env.dataset
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
@@ -35,16 +35,12 @@ func main() {
 		log.Fatalf("Database not opened")
 	}
 
-	// load bq
-	ctx := context.Background()
-	models.Bq, err = bigquery.NewClient(ctx, models.PROJECT_ID)
-	if err != nil {
-		log.Fatalf("NewClient: %v", err)
-	}
-	defer models.Bq.Close()
-
 	// Middleware
 	r.Use(TokenAuthMiddleware())
+
+	// Connect Bq
+	models.ConnectBq(env.projectID, env.dataset, env.GOOGLE_APPLICATION_CREDENTIALS_FILE)
+	// fmt.Println(models.GetQuery("SELECT * FROM `bangkit-352613.forecast.temperature_jakarta_barat` LIMIT 1000"))
 
 	// API ROUTE
 	// Root and Version
