@@ -16,6 +16,7 @@ type Env struct {
 	dbPort    string
 	appName   string
 	sigKeyJwt []byte
+	projectID string
 }
 
 var env Env
@@ -31,6 +32,8 @@ func LoadEnvironment() Env {
 		dbTCPHost: os.Getenv("DB_TCP_HOST"),
 		dbPort:    os.Getenv("DB_PORT"),
 		appName:   os.Getenv("APPLICATION_NAME"),
-		sigKeyJwt: []byte(os.Getenv("JWT_SIGNATURE_KEY"))}
+		sigKeyJwt: []byte(os.Getenv("JWT_SIGNATURE_KEY")),
+		projectID: os.Getenv("PROJECT_ID"),
+	}
 	return environment
 }

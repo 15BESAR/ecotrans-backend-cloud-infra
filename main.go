@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
+	"cloud.google.com/go/bigquery"
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/controllers"
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/gin-gonic/gin"
@@ -14,6 +16,7 @@ func main() {
 	env = LoadEnvironment()
 	models.APPLICATION_NAME = env.appName
 	models.JWT_SIGNATURE_KEY = env.sigKeyJwt
+	models.PROJECT_ID = env.projectID
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
@@ -31,6 +34,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("Database not opened")
 	}
+
+	// load bq
+	ctx := context.Background()
+	models.Bq, err = bigquery.NewClient(ctx, models.PROJECT_ID)
+	if err != nil {
+		log.Fatalf("NewClient: %v", err)
+	}
+	defer models.Bq.Close()
 
 	// Middleware
 	r.Use(TokenAuthMiddleware())
