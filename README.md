@@ -5,10 +5,10 @@ ecoTrans is a mobile application that allows users to travel to reach their dest
 
 ## Endpoints
 
-Currently hosted on GKE with endpoints:
-`34.101.186.107`
-</br>
-Try accessing API with http://34.101.186.107
+Currently hosted on Cloud Run with endpoints:
+https://backend-capstone-h3lwczj22a-et.a.run.app
+
+Cloud Run is used over GKE for pricing reason, as Cloud Run is only billed based on request compared to GKE that billed based on Node (VM) usage
 
 ## Backend and Cloud Tech Stack
 
