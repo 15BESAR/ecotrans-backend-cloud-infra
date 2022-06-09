@@ -1,0 +1,20 @@
+SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_barat' as city 
+  FROM `bangkit-352613.forecast.temperature_jakarta_barat` temp 
+  JOIN `bangkit-352613.forecast.uv_index_jakarta_barat` uv ON forecasted_uv = uv.forecasted_uv 
+  WHERE temp.forecast_hour = uv.forecast_hour union all
+SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_timur' as city 
+  FROM `bangkit-352613.forecast.temperature_jakarta_timur` temp 
+  JOIN `bangkit-352613.forecast.uv_index_jakarta_timur` uv ON forecasted_uv = uv.forecasted_uv 
+  WHERE temp.forecast_hour = uv.forecast_hour union all
+SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_utara' as city 
+  FROM `bangkit-352613.forecast.temperature_jakarta_utara` temp 
+  JOIN `bangkit-352613.forecast.uv_index_jakarta_utara` uv ON forecasted_uv = uv.forecasted_uv 
+  WHERE temp.forecast_hour = uv.forecast_hour union all
+SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_selatan' as city 
+  FROM `bangkit-352613.forecast.temperature_jakarta_selatan` temp 
+  JOIN `bangkit-352613.forecast.uv_index_jakarta_selatan` uv ON forecasted_uv = uv.forecasted_uv 
+  WHERE temp.forecast_hour = uv.forecast_hour union all
+SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_pusat' as city 
+  FROM `bangkit-352613.forecast.temperature_jakarta_pusat` temp 
+  JOIN `bangkit-352613.forecast.uv_index_jakarta_pusat` uv ON forecasted_uv = uv.forecasted_uv 
+  WHERE temp.forecast_hour = uv.forecast_hour;

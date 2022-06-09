@@ -40,7 +40,6 @@ func main() {
 
 	// Connect Bq
 	models.ConnectBq(env.projectID, env.dataset, env.GOOGLE_APPLICATION_CREDENTIALS_FILE)
-	// fmt.Println(models.GetQuery("SELECT * FROM `bangkit-352613.forecast.temperature_jakarta_barat` LIMIT 1000"))
 
 	// API ROUTE
 	// Root and Version

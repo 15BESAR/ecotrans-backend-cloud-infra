@@ -17,6 +17,7 @@ import (
 )
 
 type Forecast struct {
+	Time int     `json:"time"`
 	Temp float32 `json:"temp"`
 	Uv   float32 `json:"uv"`
 	Aqi  float32 `json:"aqi"`
@@ -32,6 +33,8 @@ type Forecasts struct {
 	UVs   []float32 `json:"uvs"`
 	AQIs  []float32 `json:"aqis"`
 }
+
+var arrayCity = [5]string{"jakarta_barat", "jakarta_timur", "jakarta_pusat", "jakarta_utara", "jakarta_selatan"}
 
 // Struct for cache
 // for each region, have temp,uv,aqi
@@ -145,7 +148,25 @@ func createRandomForecast() []Forecast {
 			uv = rand.Float32()*2 + 6
 		}
 		aqi = rand.Float32()*15 + 50
-		mySlice = append(mySlice, Forecast{temp, uv, aqi})
+		mySlice = append(mySlice, Forecast{1, temp, uv, aqi})
 	}
 	return mySlice
+}
+
+func GetForecastTemperatureFromBiqQuery() map[string][]Forecast {
+	var queryString = "SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_barat' as city FROM `bangkit-352613.forecast.temperature_jakarta_barat` temp JOIN `bangkit-352613.forecast.uv_index_jakarta_barat` uv ON forecasted_uv = uv.forecasted_uv WHERE temp.forecast_hour = uv.forecast_hour union all SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_timur' as city FROM `bangkit-352613.forecast.temperature_jakarta_timur` temp JOIN `bangkit-352613.forecast.uv_index_jakarta_timur` uv ON forecasted_uv = uv.forecasted_uv WHERE temp.forecast_hour = uv.forecast_hour union all SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_utara' as city FROM `bangkit-352613.forecast.temperature_jakarta_utara` temp JOIN `bangkit-352613.forecast.uv_index_jakarta_utara` uv ON forecasted_uv = uv.forecasted_uv WHERE temp.forecast_hour = uv.forecast_hour union all SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_selatan' as city FROM `bangkit-352613.forecast.temperature_jakarta_selatan` temp JOIN `bangkit-352613.forecast.uv_index_jakarta_selatan` uv ON forecasted_uv = uv.forecasted_uv WHERE temp.forecast_hour = uv.forecast_hour union all SELECT temp.forecast_hour,forecasted_temperature, forecasted_uv,'jakarta_pusat' as city FROM `bangkit-352613.forecast.temperature_jakarta_pusat` temp JOIN `bangkit-352613.forecast.uv_index_jakarta_pusat` uv ON forecasted_uv = uv.forecasted_uv WHERE temp.forecast_hour = uv.forecast_hour;"
+	var resultQuery = models.GetQuery(queryString)
+	res := map[string][]Forecast{}
+	for i := 0; i < len(resultQuery); i++ {
+		var temps = resultQuery[i]
+		if _, ok := res[temps.City]; !ok {
+			res[temps.City] = make([]Forecast, 0)
+		}
+		var newDataTemp Forecast
+		newDataTemp.Uv = temps.Forecasted_uv
+		newDataTemp.Temp = temps.Forecasted_temperature
+		newDataTemp.Time = temps.Forecast_hour
+		res[temps.City] = append(res[temps.City], newDataTemp)
+	}
+	return res
 }

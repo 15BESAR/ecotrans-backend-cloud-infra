@@ -40,17 +40,24 @@ func ConnectBq(projectId string, dataset string, googlecredentialfile string) {
 	}
 }
 
-func GetQuery(query string) [][]bigquery.Value {
+type RowType struct {
+	Forecast_hour          int
+	Forecasted_temperature float32
+	Forecasted_uv          float32
+	City                   string
+}
+
+func GetQuery(query string) []RowType {
 	q := Client.Query(query)
 
 	it, err := q.Read(BqCtx)
 	if err != nil {
 		log.Fatalf("Error Query : %s", err.Error())
 	}
-	var valuesTotal [][]bigquery.Value
+	var valuesTotal []RowType
 	for {
 
-		var values []bigquery.Value
+		var values RowType
 		err := it.Next(&values)
 		if err == iterator.Done {
 			break
