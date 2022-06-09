@@ -18,6 +18,8 @@ func main() {
 	models.GOOGLE_APPLICATION_CREDENTIALS_FILE = env.GOOGLE_APPLICATION_CREDENTIALS_FILE
 	models.DATASET = env.dataset
 
+	// Setup cache
+	models.C = models.SetupCache()
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 	// Connect to database
@@ -59,6 +61,9 @@ func main() {
 	// GMAPS API
 	r.POST("/autocomplete", controllers.AutocompleteLocation)
 	r.POST("/routes", controllers.FindRoutes)
+	// Forecast API
+	r.POST("/forecast", controllers.FindForecast)
+
 	// CRUD Journeys
 	r.GET("/journeys", controllers.FindAllJourneys)
 	r.POST("/journey", controllers.AddJourney)

@@ -87,6 +87,8 @@ func FindForecast(c *gin.Context) {
 			"msg":   "Places not valid"})
 		return
 	}
+	// Test Fetch
+
 	// Check region
 	region := determineRegion(resp.Candidates[0].FormattedAddress)
 	// Check cache, if not found, run Query to Fill data from bigquery
@@ -117,7 +119,7 @@ func determineRegion(address string) string {
 		return "barat"
 	} else if strings.Contains(stringLower, "jakarta timur") {
 		return "timur"
-	} else if strings.Contains(stringLower, "jakarta Utara") {
+	} else if strings.Contains(stringLower, "jakarta utara") {
 		return "utara"
 	} else {
 		return "selatan"
@@ -128,6 +130,9 @@ func fetchFromBigQuery() {
 	fmt.Println("Get into fetchfrom bigquery")
 	// yang sekarang isinya manual duls
 	// Nanti ganti ke bigquery klo udah bisa
+	m := GetForecastTemperatureFromBiqQuery()
+	pretty.Println(m)
+	// Kalo data bigquery format dan isinya udah sesuai, tuker random() ama data bq
 	models.C.Set("barat", createRandomForecast(), cache.DefaultExpiration)
 	models.C.Set("timur", createRandomForecast(), cache.DefaultExpiration)
 	models.C.Set("utara", createRandomForecast(), cache.DefaultExpiration)
@@ -148,7 +153,7 @@ func createRandomForecast() []Forecast {
 			uv = rand.Float32()*2 + 6
 		}
 		aqi = rand.Float32()*15 + 50
-		mySlice = append(mySlice, Forecast{1, temp, uv, aqi})
+		mySlice = append(mySlice, Forecast{i + 1, temp, uv, aqi})
 	}
 	return mySlice
 }
@@ -159,14 +164,29 @@ func GetForecastTemperatureFromBiqQuery() map[string][]Forecast {
 	res := map[string][]Forecast{}
 	for i := 0; i < len(resultQuery); i++ {
 		var temps = resultQuery[i]
-		if _, ok := res[temps.City]; !ok {
-			res[temps.City] = make([]Forecast, 0)
+		if _, ok := res[formatCityString(temps.City)]; !ok {
+			res[formatCityString(temps.City)] = make([]Forecast, 0)
 		}
 		var newDataTemp Forecast
 		newDataTemp.Uv = temps.Forecasted_uv
 		newDataTemp.Temp = temps.Forecasted_temperature
 		newDataTemp.Time = temps.Forecast_hour
-		res[temps.City] = append(res[temps.City], newDataTemp)
+		res[formatCityString(temps.City)] = append(res[formatCityString(temps.City)], newDataTemp)
 	}
 	return res
+}
+
+func formatCityString(str string) string {
+	stringLower := strings.ToLower(str)
+	if strings.Contains(stringLower, "jakarta_pusat") {
+		return "pusat"
+	} else if strings.Contains(stringLower, "jakarta_barat") {
+		return "barat"
+	} else if strings.Contains(stringLower, "jakarta_timur") {
+		return "timur"
+	} else if strings.Contains(stringLower, "jakarta_utara") {
+		return "utara"
+	} else {
+		return "selatan"
+	}
 }
