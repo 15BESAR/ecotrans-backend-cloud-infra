@@ -25,6 +25,7 @@ go.work
 .env.*
 # Some Gcloud Credential File
 cred*
+bangkit-352613-c476b7eb124c.json
 
 # NEXT JS 
 # dependencies
