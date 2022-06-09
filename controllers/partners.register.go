@@ -11,17 +11,23 @@ import (
 	"gorm.io/gorm"
 )
 
-func checkRegisterInputPartner(userInput models.Partner) bool {
-	// check user input sex -> move it to PUT /user to complete all user data
-	// if !(userInput.Gender == "m" || userInput.Gender == "f") {
-	// 	return false
-	// }
+func checkRegisterInputPartner(userInput models.Partner) (valid bool, msg string) {
 	// check email
 	if !isValidEmail(userInput.Email) {
-		return false
+		return false, "Email not valid"
+	}
+	sixOrMore, number, upper := verifyPassword(userInput.Password)
+	if !sixOrMore {
+		return false, "Password must have length six or more"
+	}
+	if !number {
+		return false, "Password need consists of number"
 	}
 
-	return true
+	if !upper {
+		return false, "Password must have upper case"
+	}
+	return true, "Success"
 }
 
 // POST /partner/register
@@ -35,10 +41,10 @@ func RegisterPartner(c *gin.Context) {
 			"msg":   "Data not complete"})
 		return
 	}
-	if !checkRegisterInputPartner(userInput) {
+	if valid, err := checkRegisterInputPartner(userInput); !valid {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
-			"msg":   "Wrong format"})
+			"msg":   err})
 		return
 	}
 	err := models.Db.Where("username = ? OR email = ? OR partner_name = ?", userInput.Username, userInput.Email, userInput.PartnerName).First(&databaseInput).Error

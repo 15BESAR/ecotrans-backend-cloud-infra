@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"net/mail"
+	"unicode"
 
 	"github.com/15BESAR/ecotrans-backend-cloud-infra/models"
 	"github.com/bearbin/go-age"
@@ -17,17 +18,43 @@ func isValidEmail(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
 }
-func checkRegisterInput(userInput models.User) bool {
-	// check user input sex -> move it to PUT /user to complete all user data
-	// if !(userInput.Gender == "m" || userInput.Gender == "f") {
-	// 	return false
-	// }
+func verifyPassword(s string) (sixOrMore, number, upper bool) {
+	letters := 0
+	for _, c := range s {
+		switch {
+		case unicode.IsNumber(c):
+			number = true
+		case unicode.IsUpper(c):
+			upper = true
+			letters++
+		// case unicode.IsPunct(c) || unicode.IsSymbol(c):
+		//     special = true
+		case unicode.IsLetter(c) || c == ' ':
+			letters++
+		default:
+			//return false, false, false, false
+		}
+	}
+	sixOrMore = letters >= 6
+	return
+}
+func checkRegisterInput(userInput models.User) (valid bool, msg string) {
 	// check email
 	if !isValidEmail(userInput.Email) {
-		return false
+		return false, "Email not valid"
+	}
+	sixOrMore, number, upper := verifyPassword(userInput.Password)
+	if !sixOrMore {
+		return false, "Password must have length six or more"
+	}
+	if !number {
+		return false, "Password need consists of number"
 	}
 
-	return true
+	if !upper {
+		return false, "Password must have upper case"
+	}
+	return true, "Success"
 }
 
 // POST /user/register
@@ -42,10 +69,10 @@ func RegisterUser(c *gin.Context) {
 		})
 		return
 	}
-	if !checkRegisterInput(userInput) {
+	if valid, msg := checkRegisterInput(userInput); !valid {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
-			"msg":   "Wrong format",
+			"msg":   msg,
 		})
 		return
 	}
