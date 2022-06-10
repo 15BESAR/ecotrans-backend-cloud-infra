@@ -10,7 +10,7 @@ COPY go.sum ./
 COPY . ./
 
 RUN go mod download
-
+RUN go get github.com/gin-gonic/gin/binding@v1.7.7
 
 RUN go build -o /docker-gs-ping
 
