@@ -131,13 +131,12 @@ func fetchFromBigQuery() {
 	// yang sekarang isinya manual duls
 	// Nanti ganti ke bigquery klo udah bisa
 	m := GetForecastTemperatureFromBiqQuery()
-	pretty.Println(m)
 	// Kalo data bigquery format dan isinya udah sesuai, tuker random() ama data bq
-	models.C.Set("barat", m["jakarta_barat"], cache.DefaultExpiration)
-	models.C.Set("timur", m["jakarta_timur"], cache.DefaultExpiration)
-	models.C.Set("utara", m["jakarta_utara"], cache.DefaultExpiration)
-	models.C.Set("selatan", m["jakarta_selatan"], cache.DefaultExpiration)
-	models.C.Set("pusat", m["jakarta_pusat"], cache.DefaultExpiration)
+	models.C.Set("barat", m["barat"], cache.DefaultExpiration)
+	models.C.Set("timur", m["timur"], cache.DefaultExpiration)
+	models.C.Set("utara", m["utara"], cache.DefaultExpiration)
+	models.C.Set("selatan", m["selatan"], cache.DefaultExpiration)
+	models.C.Set("pusat", m["pusat"], cache.DefaultExpiration)
 }
 
 func createRandomForecast() []Forecast {
