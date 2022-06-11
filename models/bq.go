@@ -44,6 +44,7 @@ type RowType struct {
 	Forecast_hour          int
 	Forecasted_temperature float32
 	Forecasted_uv          float32
+	Forecasted_pm25        float32
 	City                   string
 }
 
