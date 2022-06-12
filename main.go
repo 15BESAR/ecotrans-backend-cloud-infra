@@ -45,8 +45,8 @@ func main() {
 
 	// API ROUTE
 	// Root and Version
-	r.GET("/", root)
-	r.GET("/version", getVersion)
+	r.GET("/", Root)
+	r.GET("/version", GetVersion)
 	// Auth User
 	r.POST("/register", controllers.RegisterUser)
 	r.POST("/login", controllers.LoginUser)
@@ -96,10 +96,10 @@ func main() {
 	r.Run()
 }
 
-func root(c *gin.Context) {
+func Root(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"msg": "Ecotrans GO Backend API"})
 }
 
-func getVersion(c *gin.Context) {
+func GetVersion(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"version": "1.03", "lastUpdate": "June 10"})
 }
