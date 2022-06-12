@@ -1,7 +1,10 @@
-# Introduction
+# Introduction - Capstone Project C22-PS328
 
-ecoTrans is a mobile application that allows users to travel to reach their destination with the most environmentally friendly method. It provides user with list of transportation route alternative along with the carbon emission that's reduced compared to private transportation. It also gives user air quality prediction and rewards user with points that can be exchanged for various voucher. The app also gives user voucher recommendation based on user preferences, voucher availibility, and purchase pattern.
+ecoTrans is a mobile application that allows users to travel to reach their destination with the most environmentally friendly method. It provides user with list of transportation route alternative along with the carbon emission that's reduced compared to private transportation. It also gives user destination weather forecast based on ML forecasting model and rewards user with points that can be exchanged for various voucher. The app also gives user voucher recommendation based on user preferences, voucher availibility, and purchase pattern.
 </br>
+
+## Backend Purpose
+This Backend serve API for both Android Application (https://github.com/15BESAR/ecoTrans) and Web Application (https://github.com/15BESAR/ecotrans-capstone-nextjs-webapp). It also fetch forecasting data from ML model trained in Vertex and stored in Bigquery (https://github.com/15BESAR/ML-models-).
 
 ## Endpoints
 
@@ -12,25 +15,16 @@ Cloud Run is used over GKE for pricing reason, as Cloud Run is only billed based
 
 ## Backend and Cloud Tech Stack
 
-Backend created with Go with gin framework, containerization with docker and cloud build, ingress load balancing with nginx, and deployed on Google Kubernetes Engine (GKE)
-
-### Notes (For Android Dev)
-
-For current implementation, there's API that's already implementated but not included in the docs because it's intended for debugging/testing only. You also don't have to use all the API listed (eg: you only use read and delete but we'll provide whole CRUD API anyway).
-
-### Notes (For ML Dev)
-
-Current implementation doesn't utilize ML since the models haven't been deployed yet, please confirm the deployment strategy ASAP to ease the integration process between ML backend and endpoint in the future
+Backend created with Go with gin framework, cache BigQuery Data using go-cache, MySQL with GORM as ORM. Google Maps API using Go Gmaps SDK. Containerization using docker and cloud build, and already tried to deploy it on Google Kubernetes Engine (GKE) and Cloud Run. 
 
 ## Run Locally
-
 ### Using Go Run
 
 dev
 
 ```bash
 go mod download
-go run main.go
+go run .
 ```
 
 build and run for windows
@@ -64,6 +58,19 @@ You need sufficient permission to be able to execute the script successfully
 bash deploy-gke-scripts/deploy-auto.sh
 ```
 
+## Deploy to Cloud Run 
+Build docker container 
+```bash
+docker build -t gcr.io/bangkit-352613/go-test:v1.04 .
+```
+Push to container registry
+```bash
+docker push gcr.io/bangkit-352613/go-test:v1.04
+```
+Deploy to cloud run 
+```bash
+gcloud run deploy --image=gcr.io/bangkit-352613/go-test:v1.04
+```
 # API Documentation
 
 The Rest API is described below..
@@ -532,6 +539,7 @@ preference = {"walking","bicycling","driving","transit"}
 
 ```json
 {
+  "userId": "d06d8777-896e-4a74-8f81-7b530b17f9db",
   "origin": "ChIJl02Bz3GMaS4RCgefgFZdKtI", // gmaps place_id
   "destination": "ChIJY9TrwiH0aS4RrvGqlZvI_Mw",
   "startTime": "2018-12-10T13:49:51.141Z",
@@ -810,7 +818,7 @@ There's optional query string user=<user_id> to filter the data
 }
 ```
 
-## Partner Authentication API (Intended for Future Ongoing Admin Website)
+## Partner Authentication API (Intended for Website)
 
 ### 23. Register Account
 
@@ -973,19 +981,3 @@ There's optional query string user=<user_id> to filter the data
   "msg": "user deleted"
 }
 ```
-
-## Future Ongoing API
-
-### ML-Related API to Connect ML Endpoint and Android Such as :
-
-- GET Air Quality, Temperate, and UV prediction for a location
-- GET Voucher recommendation for current user
-
-### Change Password
-
-### Forgot Password
-
-## Future Development
-
-Will try to create Website including landing page, partner login/register, and
-dashboard to add/update/delete voucher. For current plan, tech stacks used will be NextJs, Typescript, Redux, Tailwind and will be deployed on Google App Engine
